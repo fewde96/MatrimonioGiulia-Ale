@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#2E2A29" />
+  <title>Admin — Giulia & Alessandro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { background: var(--avorio); }
+
+    /* LOGIN */
+    #schermata-login { display: flex; }
+    #pannello-admin  { display: none;  }
+
+    /* HEADER ADMIN */
+    .admin-header {
+      background: var(--antracite);
+      color: var(--bianco);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .admin-header h1 {
+      font-family: var(--font-serif);
+      font-weight: normal;
+      font-size: 1.15rem;
+    }
+    #btn-logout {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--bianco);
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    /* TAB */
+    .tabs {
+      display: flex;
+      background: var(--bianco);
+      border-bottom: 2px solid var(--rosa-soft);
+      position: sticky;
+      top: 53px;
+      z-index: 40;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.8rem 0.5rem;
+      border: none;
+      background: none;
+      font-size: 0.85rem;
+      color: var(--grigio);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s;
+      font-weight: 600;
+    }
+    .tab-btn.active {
+      color: var(--rosa);
+      border-bottom-color: var(--rosa);
+    }
+    .tab-content { display: none; padding: 1.2rem 1rem 5rem; }
+    .tab-content.active { display: block; }
+
+    /* FILTRO CATEGORIA */
+    .filtro-bar {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      scrollbar-width: none;
+    }
+    .filtro-bar::-webkit-scrollbar { display: none; }
+    .filtro-chip {
+      white-space: nowrap;
+      padding: 0.4rem 0.9rem;
+      border-radius: 20px;
+      border: 1.5px solid var(--rosa-soft);
+      background: var(--bianco);
+      color: var(--antracite);
+      font-size: 0.8rem;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .filtro-chip.active {
+      background: var(--rosa);
+      color: var(--bianco);
+      border-color: var(--rosa);
+    }
+
+    /* FOTO CARD ADMIN */
+    .foto-admin-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+    }
+    .foto-admin-card {
+      background: var(--bianco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--ombra);
+    }
+    .foto-admin-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    .foto-admin-info {
+      padding: 0.6rem 0.7rem 0.5rem;
+    }
+    .foto-admin-nome   { font-weight: 700; font-size: 0.82rem; }
+    .foto-admin-cat    { font-size: 0.75rem; color: var(--grigio); margin: 0.1rem 0; }
+    .foto-admin-caption{ font-size: 0.75rem; color: var(--grigio); font-style: italic; }
+    .foto-admin-actions{
+      display: flex;
+      gap: 0.4rem;
+      padding: 0 0.7rem 0.7rem;
+    }
+    .btn-sm {
+      flex: 1;
+      padding: 0.45rem 0.3rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-sm-dl  { background: var(--oro-soft);   color: var(--oro);      }
+    .btn-sm-del { background: #fdecea;            color: #c0392b;         }
+
+    /* SFIDE EDITOR */
+    .sfida-row {
+      background: var(--bianco);
+      border-radius: 10px;
+      padding: 0.8rem 1rem;
+      margin-bottom: 0.6rem;
+      box-shadow: var(--ombra);
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+    }
+    .sfida-row input[type="text"]   { flex: 1; font-size: 0.9rem; }
+    .sfida-row input[type="number"] { width: 60px; text-align: center; }
+    .btn-sfida-save { background: var(--rosa-soft); color: var(--rosa); }
+    .btn-sfida-del  { background: #fdecea; color: #c0392b; }
+
+    /* MODAL foto grande */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-overlay img {
+      max-width: 100%;
+      max-height: 90vh;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: rgba(255,255,255,0.15);
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SCHERMATA LOGIN -->
+  <div class="login-screen" id="schermata-login">
+    <div class="login-box">
+      <h2>👑 Area Sposi</h2>
+      <p>Accesso riservato a Giulia e Alessandro</p>
+      <div class="form-group">
+        <label for="admin-pwd">Password</label>
+        <input type="password" id="admin-pwd" placeholder="••••••••" />
+      </div>
+      <p id="login-errore" style="color:#c0392b;font-size:0.85rem;margin-bottom:0.8rem;display:none">
+        Password errata
+      </p>
+      <button class="btn btn-primary" id="btn-login">Entra</button>
+    </div>
+  </div>
+
+  <!-- PANNELLO ADMIN -->
+  <div id="pannello-admin">
+
+    <header class="admin-header">
+      <h1>👑 Admin</h1>
+      <button id="btn-logout">Esci</button>
+    </header>
+
+    <!-- TAB BAR -->
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="foto">📸 Foto</button>
+      <button class="tab-btn" data-tab="classifica">🏆 Classifica</button>
+      <button class="tab-btn" data-tab="sfide">⚙️ Sfide</button>
+    </div>
+
+    <!-- TAB: FOTO -->
+    <div class="tab-content active" id="tab-foto">
+      <div class="filtro-bar" id="filtro-bar">
+        <button class="filtro-chip active" data-cat="">Tutte</button>
+      </div>
+      <div class="foto-admin-grid" id="foto-grid">
+        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento…</div>
+      </div>
+    </div>
+
+    <!-- TAB: CLASSIFICA -->
+    <div class="tab-content" id="tab-classifica">
+      <div class="classifica-list" id="admin-classifica-list">
+        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento…</div>
+      </div>
+    </div>
+
+    <!-- TAB: SFIDE -->
+    <div class="tab-content" id="tab-sfide">
+      <div id="sfide-editor">
+        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento…</div>
+      </div>
+      <div class="card" style="margin-top:1.2rem">
+        <h3 class="section-title" style="font-size:1rem;margin-bottom:1rem">Aggiungi sfida</h3>
+        <div class="form-group">
+          <label>Descrizione</label>
+          <input type="text" id="nuova-desc" placeholder="Es. Qualcuno che balla…" />
+        </div>
+        <div class="form-group">
+          <label>Punti</label>
+          <input type="number" id="nuovi-punti" min="1" max="10" value="2" style="width:100px" />
+        </div>
+        <button class="btn btn-primary" id="btn-aggiungi-sfida">Aggiungi sfida</button>
+      </div>
+    </div>
+
+  </div><!-- /pannello-admin -->
+
+  <!-- MODAL FOTO GRANDE -->
+  <div class="modal-overlay" id="modal">
+    <button class="modal-close" id="modal-close">✕</button>
+    <img id="modal-img" src="" alt="" />
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#C4A09A" />
+  <title>Giulia & Alessandro — Gioco Fotografico</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="hero-nomi"><span>Giulia</span> &amp; <span>Alessandro</span></h1>
+      <p class="hero-sub">Gioco Fotografico</p>
+      <p class="hero-castle">Castello di Torre Alfina</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- SFIDE -->
+    <section id="sezione-sfide">
+      <h2 class="section-title">📸 Le sfide</h2>
+      <div class="sfide-grid" id="sfide-grid">
+        <!-- Popolato da app.js -->
+        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento sfide…</div>
+      </div>
+    </section>
+
+    <!-- FORM UPLOAD -->
+    <section id="sezione-upload">
+      <h2 class="section-title">🏆 Carica la tua foto</h2>
+      <div class="card">
+        <form id="upload-form" novalidate>
+
+          <div class="form-group">
+            <label for="player-name">Il tuo nome</label>
+            <input type="text" id="player-name" placeholder="Come ti chiami?" autocomplete="given-name" required />
+          </div>
+
+          <div class="form-group">
+            <label for="sfida-select">Sfida completata</label>
+            <select id="sfida-select" required>
+              <option value="">— Scegli una sfida —</option>
+              <!-- Popolato da app.js -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="caption">Didascalia <span style="font-weight:400;text-transform:none">(opzionale)</span></label>
+            <textarea id="caption" placeholder="Scrivi qualcosa di divertente…"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Foto</label>
+            <div class="upload-area" id="upload-area">
+              <input type="file" id="foto-input" accept="image/*" capture="environment" required />
+              <div class="upload-icon">📷</div>
+              <p class="upload-label">Tocca per scattare o scegliere dalla galleria</p>
+            </div>
+            <div class="upload-preview" id="upload-preview">
+              <img id="preview-img" src="" alt="Anteprima foto" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="submit-btn">
+            Carica la foto
+          </button>
+
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NAVIGAZIONE BOTTOM -->
+  <nav class="nav-bottom">
+    <a href="index.html" class="nav-item active">
+      <span class="nav-icon">📸</span>
+      <span>Sfide</span>
+    </a>
+    <a href="classifica.html" class="nav-item">
+      <span class="nav-icon">🏆</span>
+      <span>Classifica</span>
+    </a>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- SCRIPT -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

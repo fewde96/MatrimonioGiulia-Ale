@@ -1,0 +1,18 @@
+[
+  { "id": 1,  "descrizione": "Gli sposi che si baciano",              "punti": 5 },
+  { "id": 2,  "descrizione": "Foto con entrambi gli sposi",           "punti": 4 },
+  { "id": 3,  "descrizione": "Sposa accigliata o scocciata",          "punti": 3 },
+  { "id": 4,  "descrizione": "Sposo che piange (o quasi)",            "punti": 4 },
+  { "id": 5,  "descrizione": "Sposi mentre mangiano",                 "punti": 2 },
+  { "id": 6,  "descrizione": "Selfie con gli sposi",                  "punti": 3 },
+  { "id": 7,  "descrizione": "Il lancio del bouquet",                 "punti": 5 },
+  { "id": 8,  "descrizione": "Qualcuno che balla da solo",            "punti": 2 },
+  { "id": 9,  "descrizione": "Foto di gruppo con almeno 6 persone",   "punti": 3 },
+  { "id": 10, "descrizione": "Un bambino al matrimonio",              "punti": 2 },
+  { "id": 11, "descrizione": "Qualcuno che dorme",                    "punti": 4 },
+  { "id": 12, "descrizione": "Il tavolo più in festa",                "punti": 2 },
+  { "id": 13, "descrizione": "Dettaglio floreale o decorazione",      "punti": 1 },
+  { "id": 14, "descrizione": "Tramonto o cielo romantico",            "punti": 2 },
+  { "id": 15, "descrizione": "Foto artistica in bianco e nero",       "punti": 3 }
+]
+

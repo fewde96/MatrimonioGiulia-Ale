@@ -1,0 +1,526 @@
+/* ============================================================
+   Giulia & Alessandro — Gioco Fotografico del Matrimonio
+   Palette: Rosa Antico · Avorio · Oro · Antracite
+   Mobile-first, testato su iOS e Android
+   ============================================================ */
+
+/* ---------- Variabili ---------- */
+:root {
+  --rosa:      #C4A09A;
+  --rosa-soft: #EDD8D3;
+  --avorio:    #FAF6F2;
+  --oro:       #B8975A;
+  --oro-soft:  #F0E6D0;
+  --antracite: #2E2A29;
+  --grigio:    #7A7070;
+  --bianco:    #FFFFFF;
+  --ombra:     0 2px 12px rgba(46, 42, 41, 0.12);
+  --raggio:    14px;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+  --font-sans:  system-ui, -apple-system, sans-serif;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--avorio);
+  color: var(--antracite);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: var(--rosa);
+  text-decoration: none;
+}
+
+/* ---------- Hero (solo index.html) ---------- */
+.hero {
+  position: relative;
+  min-height: 38vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2.5rem 1.5rem 3rem;
+  overflow: hidden;
+  background-color: var(--antracite); /* fallback se manca sfondo.jpg */
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('../img/sfondo.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  filter: brightness(0.45) saturate(0.8);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-nomi {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 8vw, 3.2rem);
+  font-weight: normal;
+  color: var(--bianco);
+  letter-spacing: 0.04em;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.hero-nomi span {
+  color: var(--rosa-soft);
+}
+
+.hero-sub {
+  margin-top: 0.5rem;
+  font-size: clamp(0.85rem, 3.5vw, 1rem);
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.hero-castle {
+  margin-top: 0.4rem;
+  font-size: clamp(0.75rem, 3vw, 0.85rem);
+  color: var(--rosa-soft);
+  letter-spacing: 0.08em;
+  font-style: italic;
+}
+
+/* ---------- Layout contenuto ---------- */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 5rem;
+}
+
+/* ---------- Titoli sezione ---------- */
+.section-title {
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
+  font-weight: normal;
+  color: var(--antracite);
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rosa-soft);
+}
+
+/* ---------- Card sfida ---------- */
+.sfide-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.sfida-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bianco);
+  border-radius: var(--raggio);
+  padding: 0.9rem 1.1rem;
+  box-shadow: var(--ombra);
+  border-left: 4px solid var(--rosa);
+  gap: 0.8rem;
+}
+
+.sfida-desc {
+  font-size: 0.95rem;
+  flex: 1;
+}
+
+.sfida-punti {
+  background: var(--oro-soft);
+  color: var(--oro);
+  font-weight: 700;
+  font-size: 0.85rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* ---------- Form upload ---------- */
+.card {
+  background: var(--bianco);
+  border-radius: var(--raggio);
+  padding: 1.4rem 1.2rem;
+  box-shadow: var(--ombra);
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--grigio);
+  margin-bottom: 0.4rem;
+}
+
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1.5px solid var(--rosa-soft);
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  background: var(--avorio);
+  color: var(--antracite);
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--rosa);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7070' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* ---------- Upload foto ---------- */
+.upload-area {
+  border: 2px dashed var(--rosa);
+  border-radius: var(--raggio);
+  padding: 2rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  background: var(--avorio);
+  transition: background 0.2s;
+  position: relative;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+  background: var(--rosa-soft);
+}
+
+.upload-area input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.upload-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.upload-label {
+  font-size: 0.9rem;
+  color: var(--grigio);
+}
+
+.upload-preview {
+  margin-top: 1rem;
+  border-radius: 10px;
+  overflow: hidden;
+  display: none;
+}
+
+.upload-preview img {
+  width: 100%;
+  max-height: 280px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ---------- Bottoni ---------- */
+.btn {
+  display: block;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: var(--raggio);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: opacity 0.2s, transform 0.1s;
+  letter-spacing: 0.03em;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: scale(0.98);
+  opacity: 0.85;
+}
+
+.btn-primary {
+  background: var(--rosa);
+  color: var(--bianco);
+}
+
+.btn-secondary {
+  background: var(--avorio);
+  color: var(--rosa);
+  border: 1.5px solid var(--rosa);
+}
+
+.btn-oro {
+  background: var(--oro);
+  color: var(--bianco);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- Navigazione bottom ---------- */
+.nav-bottom {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bianco);
+  border-top: 1px solid var(--rosa-soft);
+  display: flex;
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(46,42,41,0.08);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.7rem;
+  color: var(--grigio);
+  text-decoration: none;
+  gap: 0.2rem;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item.active,
+.nav-item:hover {
+  color: var(--rosa);
+}
+
+.nav-item .nav-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+/* ---------- Classifica ---------- */
+.classifica-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.classifica-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--bianco);
+  border-radius: var(--raggio);
+  padding: 1rem 1.2rem;
+  box-shadow: var(--ombra);
+}
+
+.classifica-pos {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--rosa-soft);
+  min-width: 2rem;
+  text-align: center;
+}
+
+.classifica-pos.top1 { color: var(--oro); }
+.classifica-pos.top2 { color: var(--grigio); }
+.classifica-pos.top3 { color: #a97c50; }
+
+.classifica-nome {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.classifica-punti {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--oro);
+}
+
+.classifica-punti span {
+  font-size: 0.7rem;
+  font-weight: normal;
+  color: var(--grigio);
+}
+
+/* ---------- Toast / Feedback ---------- */
+.toast {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--antracite);
+  color: var(--bianco);
+  padding: 0.8rem 1.4rem;
+  border-radius: 24px;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 200;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success { background: #4a7c59; }
+.toast.error   { background: #9c3d3d; }
+
+/* ---------- Spinner ---------- */
+.spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.4);
+  border-top-color: var(--bianco);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Admin: galleria ---------- */
+.foto-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8rem;
+}
+
+.foto-card {
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bianco);
+  box-shadow: var(--ombra);
+}
+
+.foto-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.foto-info {
+  padding: 0.5rem 0.7rem;
+  font-size: 0.78rem;
+}
+
+.foto-nome {
+  font-weight: 600;
+  color: var(--antracite);
+}
+
+.foto-caption {
+  color: var(--grigio);
+  font-style: italic;
+}
+
+/* ---------- Stato vuoto ---------- */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--grigio);
+}
+
+.empty-state .empty-icon {
+  font-size: 3rem;
+  margin-bottom: 0.8rem;
+}
+
+/* ---------- Schermata login admin ---------- */
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: var(--avorio);
+}
+
+.login-box {
+  background: var(--bianco);
+  border-radius: var(--raggio);
+  padding: 2rem 1.5rem;
+  box-shadow: var(--ombra);
+  width: 100%;
+  max-width: 360px;
+  text-align: center;
+}
+
+.login-box h2 {
+  font-family: var(--font-serif);
+  font-weight: normal;
+  font-size: 1.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.login-box p {
+  color: var(--grigio);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+

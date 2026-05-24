@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#C4A09A" />
+  <title>Classifica — Giulia & Alessandro</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .header-classifica {
+      background: var(--antracite);
+      padding: 1.4rem 1rem 1rem;
+      text-align: center;
+    }
+    .header-classifica h1 {
+      font-family: var(--font-serif);
+      font-weight: normal;
+      font-size: 1.5rem;
+      color: var(--bianco);
+    }
+    .header-classifica p {
+      font-size: 0.8rem;
+      color: var(--rosa-soft);
+      margin-top: 0.2rem;
+      letter-spacing: 0.08em;
+    }
+    .live-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #6fcf97;
+      border-radius: 50%;
+      margin-right: 0.4rem;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.3; }
+    }
+    .aggiornato {
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--grigio);
+      margin-bottom: 1rem;
+    }
+    .classifica-foto-count {
+      font-size: 0.75rem;
+      color: var(--grigio);
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header-classifica">
+    <h1>🏆 Classifica</h1>
+    <p><span class="live-dot"></span>Aggiornamento in tempo reale</p>
+  </header>
+
+  <main class="container">
+    <p class="aggiornato" id="aggiornato">Caricamento…</p>
+
+    <div class="classifica-list" id="classifica-list">
+      <div class="empty-state">
+        <div class="empty-icon">⏳</div>
+        Caricamento classifica…
+      </div>
+    </div>
+  </main>
+
+  <!-- NAVIGAZIONE BOTTOM -->
+  <nav class="nav-bottom">
+    <a href="index.html" class="nav-item">
+      <span class="nav-icon">📸</span>
+      <span>Sfide</span>
+    </a>
+    <a href="classifica.html" class="nav-item active">
+      <span class="nav-icon">🏆</span>
+      <span>Classifica</span>
+    </a>
+  </nav>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script src="js/classifica.js"></script>
+
+</body>
+</html>
