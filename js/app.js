@@ -74,15 +74,14 @@ fotoInput.addEventListener('change', () => {
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const playerName = document.getElementById('player-name-input').value.trim();
+  const playerName = (document.getElementById('nomi-select').value || '').trim();
   const sfidaId    = parseInt(sfidaSelect.value, 10);
   const caption    = document.getElementById('caption').value.trim();
 
   // Validazione base
-  if (!playerName)                        return mostraToast('Cerca e seleziona il tuo nome', 'error');
-  if (!partecipanti.includes(playerName)) return mostraToast('Seleziona il tuo nome dalla lista', 'error');
-  if (!sfidaId)                           return mostraToast('Scegli una sfida', 'error');
-  if (!fotoFile)                          return mostraToast('Aggiungi una foto', 'error');
+  if (!playerName) return mostraToast('Scegli il tuo nome', 'error');
+  if (!sfidaId)    return mostraToast('Scegli una sfida', 'error');
+  if (!fotoFile)   return mostraToast('Aggiungi una foto', 'error');
 
   const sfida = sfide.find(s => s.id === sfidaId);
   if (!sfida) return mostraToast('Sfida non valida', 'error');
@@ -147,8 +146,9 @@ function resetForm() {
   uploadPreview.style.display = 'none';
   previewImg.src = '';
   sfidaSelect.value = '';
-  const input = document.getElementById('player-name-input');
-  if (input) { input.value = ''; input.classList.remove('nome-input-invalid'); }
+  const cerca = document.getElementById('nomi-cerca');
+  if (cerca) cerca.value = '';
+  ripristinaOpzioniNomi();
 }
 
 let toastTimer;
@@ -166,69 +166,41 @@ caricaSfide();
 caricaPartecipanti();
 
 // ============================================================
-//  Caricamento partecipanti + dropdown custom strict
+//  Caricamento partecipanti + select con filtro
 // ============================================================
 async function caricaPartecipanti() {
   try {
     const res = await fetch('partecipanti.json');
     if (!res.ok) return;
     partecipanti = await res.json();
-    inizializzaDropdownNomi();
+    popolaSelectNomi(partecipanti);
+    inizializzaFiltroNomi();
   } catch (e) {
     console.warn('partecipanti.json non trovato', e);
   }
 }
 
-function inizializzaDropdownNomi() {
-  const input    = document.getElementById('player-name-input');
-  const dropdown = document.getElementById('nome-dropdown');
-  if (!input || !dropdown) return;
+function popolaSelectNomi(lista) {
+  const sel = document.getElementById('nomi-select');
+  if (!sel) return;
+  const corrente = sel.value;
+  sel.innerHTML = '<option value="">— Scegli il tuo nome —</option>' +
+    lista.map(n => `<option value="${n}"${n === corrente ? ' selected' : ''}>${n}</option>`).join('');
+}
 
-  function renderOpzioni(filtro) {
-    const lista = filtro
-      ? partecipanti.filter(n => n.toLowerCase().includes(filtro.toLowerCase()))
+function ripristinaOpzioniNomi() {
+  popolaSelectNomi(partecipanti);
+}
+
+function inizializzaFiltroNomi() {
+  const cerca = document.getElementById('nomi-cerca');
+  if (!cerca) return;
+  cerca.addEventListener('input', () => {
+    const q = cerca.value.toLowerCase();
+    const filtrati = q
+      ? partecipanti.filter(n => n.toLowerCase().includes(q))
       : partecipanti;
-    if (lista.length === 0) { dropdown.classList.remove('open'); return; }
-    dropdown.innerHTML = lista
-      .map(n => `<div class="nome-option" data-nome="${n}">${n}</div>`)
-      .join('');
-    dropdown.classList.add('open');
-  }
-
-  input.addEventListener('focus', () => renderOpzioni(input.value));
-
-  input.addEventListener('input', () => {
-    input.classList.remove('nome-input-invalid');
-    renderOpzioni(input.value);
-  });
-
-  // mousedown prima del blur: evita che il dropdown chiuda prima del click
-  dropdown.addEventListener('mousedown', e => e.preventDefault());
-  dropdown.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
-
-  dropdown.addEventListener('click', e => {
-    const opt = e.target.closest('.nome-option');
-    if (!opt) return;
-    input.value = opt.dataset.nome;
-    input.classList.remove('nome-input-invalid');
-    dropdown.classList.remove('open');
-  });
-
-  // Selezione touch
-  dropdown.addEventListener('touchend', e => {
-    const opt = e.target.closest('.nome-option');
-    if (!opt) return;
-    e.preventDefault();
-    input.value = opt.dataset.nome;
-    input.classList.remove('nome-input-invalid');
-    dropdown.classList.remove('open');
-  });
-
-  input.addEventListener('blur', () => {
-    setTimeout(() => dropdown.classList.remove('open'), 150);
-    if (input.value && !partecipanti.includes(input.value)) {
-      input.classList.add('nome-input-invalid');
-    }
+    popolaSelectNomi(filtrati);
   });
 }
 
