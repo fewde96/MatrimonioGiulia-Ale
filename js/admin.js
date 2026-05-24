@@ -5,7 +5,7 @@
 const ADMIN_PASSWORD = 'giulieale';
 
 // Supabase inizializzato solo dopo login (evita crash se config.js non è pronto)
-let supabase = null;
+let supabaseClient = null;
 
 // ============================================================
 //  LOGIN — puro JS, nessuna dipendenza da Supabase
@@ -41,9 +41,9 @@ document.getElementById('btn-logout').addEventListener('click', () => {
 
 function inizializzaSupabaseEMostra() {
   try {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   } catch (e) {
-    alert('Errore connessione Supabase. Ricarica la pagina.');
+    alert('Errore connessione supabaseClient. Ricarica la pagina.');
     return;
   }
   mostraAdmin();
@@ -134,7 +134,7 @@ function renderFoto() {
 
 async function eliminaFoto(id, btnEl) {
   if (!confirm('Eliminare questa foto?')) return;
-  const { error } = await supabase.from('submissions').delete().eq('id', id);
+  const { error } = await supabaseClient.from('submissions').delete().eq('id', id);
   if (error) { mostraToast('Errore eliminazione', 'error'); return; }
   tutteLeSubmissions = tutteLeSubmissions.filter(s => s.id !== id);
   renderFoto();
@@ -261,7 +261,7 @@ async function salvaSfida(id) {
 
 async function eliminaSfida(id) {
   if (!confirm('Eliminare questa sfida?')) return;
-  const { error } = await supabase.from('sfide').delete().eq('id', id);
+  const { error } = await supabaseClient.from('sfide').delete().eq('id', id);
   if (error) { mostraToast('Errore eliminazione', 'error'); return; }
   sfide = sfide.filter(s => s.id !== id);
   renderSfideEditor();

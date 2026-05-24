@@ -3,7 +3,7 @@
 // ============================================================
 
 // --- Inizializzazione Supabase ---
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // --- Stato ---
 let sfide = [];
@@ -23,7 +23,7 @@ const toast        = document.getElementById('toast');
 //  Caricamento sfide da Supabase (tabella "sfide")
 // ============================================================
 async function caricaSfide() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('sfide')
     .select('id, descrizione, punti')
     .order('ordine', { ascending: true });
@@ -95,7 +95,7 @@ uploadForm.addEventListener('submit', async (e) => {
     const safeName = playerName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
     const filePath = `${safeName}/${Date.now()}.${ext}`;
 
-    const { error: uploadError } = await supabase
+    const { error: uploadError } = await supabaseClient
       .storage
       .from('wedding-photos')
       .upload(filePath, fotoFile, { upsert: false });
@@ -103,7 +103,7 @@ uploadForm.addEventListener('submit', async (e) => {
     if (uploadError) throw uploadError;
 
     // 2. Recupera URL pubblico
-    const { data: urlData } = supabase
+    const { data: urlData } = supabaseClient
       .storage
       .from('wedding-photos')
       .getPublicUrl(filePath);
@@ -111,7 +111,7 @@ uploadForm.addEventListener('submit', async (e) => {
     const photoUrl = urlData.publicUrl;
 
     // 3. Salva record nella tabella submissions
-    const { error: dbError } = await supabase
+    const { error: dbError } = await supabaseClient
       .from('submissions')
       .insert({
         player_name: playerName,

@@ -2,7 +2,7 @@
 //  classifica.js — Classifica in tempo reale con Supabase Realtime
 // ============================================================
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const classificaList = document.getElementById('classifica-list');
 const aggiornato     = document.getElementById('aggiornato');
@@ -11,7 +11,7 @@ const aggiornato     = document.getElementById('aggiornato');
 //  Recupera e aggrega i punti per giocatore
 // ============================================================
 async function caricaClassifica() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('submissions')
     .select('player_name, points');
 
@@ -76,7 +76,7 @@ function renderClassifica(classifica) {
 // ============================================================
 //  Supabase Realtime — ascolta INSERT sulla tabella submissions
 // ============================================================
-supabase
+supabaseClient
   .channel('classifica-live')
   .on(
     'postgres_changes',
