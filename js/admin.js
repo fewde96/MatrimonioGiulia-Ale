@@ -4,10 +4,11 @@
 
 const ADMIN_PASSWORD = 'giulieale';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Supabase inizializzato solo dopo login (evita crash se config.js non è pronto)
+let supabase = null;
 
 // ============================================================
-//  LOGIN
+//  LOGIN — puro JS, nessuna dipendenza da Supabase
 // ============================================================
 const schermataLogin  = document.getElementById('schermata-login');
 const pannelloAdmin   = document.getElementById('pannello-admin');
@@ -15,14 +16,15 @@ const btnLogin        = document.getElementById('btn-login');
 const adminPwd        = document.getElementById('admin-pwd');
 const loginErrore     = document.getElementById('login-errore');
 
-// Controlla se già autenticato in questa sessione
-if (sessionStorage.getItem('admin_ok') === '1') mostraAdmin();
+if (sessionStorage.getItem('admin_ok') === '1') {
+  inizializzaSupabaseEMostra();
+}
 
 btnLogin.addEventListener('click', () => {
-  if (adminPwd.value === ADMIN_PASSWORD) {
+  if (adminPwd.value.trim() === ADMIN_PASSWORD) {
     sessionStorage.setItem('admin_ok', '1');
     loginErrore.style.display = 'none';
-    mostraAdmin();
+    inizializzaSupabaseEMostra();
   } else {
     loginErrore.style.display = 'block';
     adminPwd.value = '';
@@ -36,6 +38,16 @@ document.getElementById('btn-logout').addEventListener('click', () => {
   sessionStorage.removeItem('admin_ok');
   location.reload();
 });
+
+function inizializzaSupabaseEMostra() {
+  try {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch (e) {
+    alert('Errore connessione Supabase. Ricarica la pagina.');
+    return;
+  }
+  mostraAdmin();
+}
 
 function mostraAdmin() {
   schermataLogin.style.display = 'none';
