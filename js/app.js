@@ -169,7 +169,7 @@ caricaPartecipanti();
 // ============================================================
 async function caricaPartecipanti() {
   try {
-    const res = await fetch('partecipanti.json');
+    const res = await fetch('partecipanti.json?v=2');
     if (!res.ok) return;
     partecipanti = await res.json();
     popolaSelectNomi(partecipanti);
