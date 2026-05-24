@@ -221,6 +221,11 @@
 
     <!-- TAB: FOTO -->
     <div class="tab-content active" id="tab-foto">
+      <div style="padding:0.8rem 1rem 0;display:flex;justify-content:flex-end">
+        <button onclick="svuotaTutto()" style="background:#fdecea;color:#c0392b;border:none;border-radius:8px;padding:0.4rem 0.9rem;font-size:0.8rem;font-weight:600;cursor:pointer">
+          🗑 Svuota tutti i dati di test
+        </button>
+      </div>
       <div class="filtro-bar" id="filtro-bar">
         <button class="filtro-chip active" data-cat="">Tutte</button>
       </div>
@@ -268,7 +273,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/admin.js?v=2"></script>
+  <script src="js/admin.js?v=3"></script>
 
 </body>
 </html>

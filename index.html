@@ -36,10 +36,12 @@
         <form id="upload-form" novalidate>
 
           <div class="form-group">
-            <label for="player-name">Il tuo nome</label>
-            <input type="text" id="player-name" list="nomi-list"
-                   placeholder="Cerca il tuo nome…" autocomplete="off" required />
-            <datalist id="nomi-list"></datalist>
+            <label for="player-name-input">Il tuo nome</label>
+            <div class="nome-select-wrapper">
+              <input type="text" id="player-name-input"
+                     placeholder="Cerca il tuo nome…" autocomplete="off" />
+              <div class="nome-dropdown" id="nome-dropdown"></div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -95,7 +97,7 @@
   <!-- SCRIPT -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/app.js?v=4"></script>
 
 </body>
 </html>

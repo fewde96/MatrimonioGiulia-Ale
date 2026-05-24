@@ -134,12 +134,50 @@ function renderFoto() {
 
 async function eliminaFoto(id, btnEl) {
   if (!confirm('Eliminare questa foto?')) return;
+  const sub = tutteLeSubmissions.find(s => s.id === id);
+
   const { error } = await supabaseClient.from('submissions').delete().eq('id', id);
   if (error) { mostraToast('Errore eliminazione', 'error'); return; }
+
+  // Elimina anche il file dallo Storage
+  if (sub) {
+    const path = estraiPathStorage(sub.photo_url);
+    if (path) await supabaseClient.storage.from('wedding-photos').remove([path]);
+  }
+
   tutteLeSubmissions = tutteLeSubmissions.filter(s => s.id !== id);
   renderFoto();
   renderFiltri();
   mostraToast('Foto eliminata');
+}
+
+function estraiPathStorage(url) {
+  const marker = '/object/public/wedding-photos/';
+  const idx = url.indexOf(marker);
+  return idx !== -1 ? decodeURIComponent(url.substring(idx + marker.length)) : null;
+}
+
+async function svuotaTutto() {
+  if (!confirm('⚠️ Eliminare TUTTE le foto e i punteggi?\nQuesta azione non è reversibile.')) return;
+  if (!confirm('Ultima conferma: sicuro di voler svuotare tutto?')) return;
+
+  const paths = tutteLeSubmissions
+    .map(s => estraiPathStorage(s.photo_url))
+    .filter(Boolean);
+
+  const { error } = await supabaseClient
+    .from('submissions').delete().not('id', 'is', null);
+
+  if (error) { mostraToast('Errore eliminazione DB', 'error'); return; }
+
+  if (paths.length > 0) {
+    await supabaseClient.storage.from('wedding-photos').remove(paths);
+  }
+
+  tutteLeSubmissions = [];
+  renderFoto();
+  renderFiltri();
+  mostraToast('Tutti i dati eliminati ✓', 'success');
 }
 
 async function scaricaFoto(url, nome) {

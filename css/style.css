@@ -524,3 +524,54 @@ select {
   margin-bottom: 1.5rem;
 }
 
+/* ---------- Dropdown nomi custom ---------- */
+.nome-select-wrapper {
+  position: relative;
+}
+
+.nome-select-wrapper input {
+  width: 100%;
+}
+
+.nome-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 0;
+  right: 0;
+  background: var(--bianco);
+  border: 1.5px solid var(--rosa);
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 0 6px 16px rgba(46,42,41,0.12);
+}
+
+.nome-dropdown.open {
+  display: block;
+}
+
+.nome-option {
+  padding: 0.8rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--rosa-soft);
+  transition: background 0.15s;
+}
+
+.nome-option:last-child {
+  border-bottom: none;
+}
+
+.nome-option:hover,
+.nome-option:active {
+  background: var(--rosa-soft);
+}
+
+.nome-input-invalid {
+  border-color: #e08080 !important;
+  background: #fff5f5 !important;
+}
+
