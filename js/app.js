@@ -159,4 +159,21 @@ function mostraToast(msg, tipo = '') {
 
 // --- Avvio ---
 caricaSfide();
+caricaPartecipanti();
+
+// ============================================================
+//  Caricamento partecipanti per datalist
+// ============================================================
+async function caricaPartecipanti() {
+  try {
+    const res = await fetch('partecipanti.json');
+    if (!res.ok) return;
+    const nomi = await res.json();
+    const datalist = document.getElementById('nomi-list');
+    if (!datalist) return;
+    datalist.innerHTML = nomi.map(n => `<option value="${n}"></option>`).join('');
+  } catch (e) {
+    console.warn('partecipanti.json non trovato', e);
+  }
+}
 

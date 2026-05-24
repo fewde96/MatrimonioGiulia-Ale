@@ -1,53 +1,47 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#C4A09A" />
-  <title>Classifica — Giulia & Alessandro</title>
+  <title>Classifica — Giulia &amp; Alessandro</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
-    .header-classifica {
-      background: var(--antracite);
-      padding: 1.4rem 1rem 1rem;
-      text-align: center;
-    }
-    .header-classifica h1 {
-      font-family: var(--font-serif);
-      font-weight: normal;
-      font-size: 1.5rem;
-      color: var(--bianco);
-    }
-    .header-classifica p {
-      font-size: 0.8rem;
-      color: var(--rosa-soft);
-      margin-top: 0.2rem;
-      letter-spacing: 0.08em;
-    }
-    .live-dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #6fcf97;
-      border-radius: 50%;
-      margin-right: 0.4rem;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
-    }
-    .aggiornato {
-      text-align: center;
-      font-size: 0.75rem;
-      color: var(--grigio);
-      margin-bottom: 1rem;
-    }
-    .classifica-foto-count {
-      font-size: 0.75rem;
-      color: var(--grigio);
-      font-weight: normal;
-    }
+    .header-classifica { background: var(--antracite); padding: 1.2rem 1rem 0; text-align: center; }
+    .header-classifica h1 { font-family: var(--font-serif); font-weight: normal; font-size: 1.4rem; color: var(--bianco); }
+    .header-classifica p { font-size: 0.78rem; color: var(--rosa-soft); margin: 0.2rem 0 0; letter-spacing: 0.08em; }
+    .live-dot { display:inline-block; width:8px; height:8px; background:#6fcf97; border-radius:50%; margin-right:0.3rem; animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .tab-bar { display:flex; background:var(--antracite); margin-top:0.6rem; }
+    .tab-btn { flex:1; padding:0.7rem 0.5rem; border:none; background:none; color:rgba(255,255,255,0.45); font-size:0.85rem; font-weight:600; cursor:pointer; border-bottom:2px solid transparent; transition:color 0.2s; }
+    .tab-btn.active { color:var(--rosa-soft); border-bottom-color:var(--rosa); }
+    .tab-content { display:none; }
+    .tab-content.active { display:block; }
+    .aggiornato { text-align:center; font-size:0.75rem; color:var(--grigio); margin-bottom:1rem; }
+    .classifica-foto-count { font-size:0.72rem; color:var(--grigio); font-weight:normal; margin-left:0.3rem; }
+    .btn-vedi-foto { background:var(--rosa-soft); border:none; border-radius:20px; padding:0.2rem 0.6rem; font-size:0.72rem; color:var(--rosa); cursor:pointer; margin-top:0.3rem; display:inline-block; -webkit-tap-highlight-color:transparent; }
+    .foto-grid-pub { display:grid; grid-template-columns:repeat(2,1fr); gap:0.8rem; margin-bottom:1rem; }
+    .foto-card-pub { background:var(--bianco); border-radius:12px; overflow:hidden; box-shadow:var(--ombra); position:relative; }
+    .foto-card-pub img { width:100%; aspect-ratio:1; object-fit:cover; cursor:pointer; display:block; }
+    .foto-card-info { padding:0.45rem 0.65rem 0.2rem; }
+    .foto-card-nome { font-weight:700; font-size:0.78rem; }
+    .foto-card-cat  { font-size:0.7rem; color:var(--grigio); }
+    .foto-card-caption { font-size:0.7rem; color:var(--grigio); font-style:italic; }
+    .foto-card-bottom { padding:0.3rem 0.65rem 0.65rem; }
+    .btn-like { background:none; border:1.5px solid var(--rosa-soft); border-radius:20px; padding:0.22rem 0.65rem; font-size:0.82rem; cursor:pointer; transition:background 0.2s; -webkit-tap-highlight-color:transparent; }
+    .btn-like.liked { background:#fde8e8; border-color:#e08080; color:#b03030; }
+    .btn-like:disabled { cursor:default; }
+    .top-badge { position:absolute; top:0.4rem; left:0.4rem; background:var(--oro); color:#fff; border-radius:10px; padding:0.15rem 0.45rem; font-size:0.68rem; font-weight:700; pointer-events:none; }
+    .player-modal { position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:150; display:none; align-items:flex-end; }
+    .player-modal.open { display:flex; }
+    .player-modal-box { background:var(--avorio); border-radius:20px 20px 0 0; width:100%; max-height:82vh; overflow-y:auto; padding:1rem 1rem 5rem; }
+    .player-modal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; position:sticky; top:0; background:var(--avorio); padding:0.4rem 0; }
+    .player-modal-header h3 { font-family:var(--font-serif); font-weight:normal; font-size:1.05rem; }
+    .player-modal-close { background:var(--rosa-soft); border:none; border-radius:50%; width:32px; height:32px; font-size:1rem; cursor:pointer; }
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.88); z-index:200; align-items:center; justify-content:center; padding:1rem; }
+    .modal-overlay.open { display:flex; }
+    .modal-overlay img { max-width:100%; max-height:90vh; border-radius:10px; object-fit:contain; }
+    .modal-close { position:absolute; top:1rem; right:1rem; background:rgba(255,255,255,0.15); border:none; color:white; font-size:1.5rem; width:44px; height:44px; border-radius:50%; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -55,34 +49,70 @@
   <header class="header-classifica">
     <h1>🏆 Classifica</h1>
     <p><span class="live-dot"></span>Aggiornamento in tempo reale</p>
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="classifica">🏆 Classifica</button>
+      <button class="tab-btn" data-tab="galleria">📸 Galleria</button>
+    </div>
   </header>
 
-  <main class="container">
-    <p class="aggiornato" id="aggiornato">Caricamento…</p>
-
-    <div class="classifica-list" id="classifica-list">
-      <div class="empty-state">
-        <div class="empty-icon">⏳</div>
-        Caricamento classifica…
+  <!-- TAB: CLASSIFICA -->
+  <div class="tab-content active" id="tab-classifica">
+    <div class="container">
+      <p class="aggiornato" id="aggiornato">Caricamento…</p>
+      <div class="classifica-list" id="classifica-list">
+        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento…</div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <!-- NAVIGAZIONE BOTTOM -->
+  <!-- TAB: GALLERIA -->
+  <div class="tab-content" id="tab-galleria">
+    <div class="container">
+      <section id="top-foto-section" style="display:none">
+        <h2 class="section-title">❤️ Foto più amate</h2>
+        <div class="foto-grid-pub" id="top-foto-grid"></div>
+      </section>
+      <h2 class="section-title">📸 Tutte le foto</h2>
+      <div class="foto-grid-pub" id="galleria-grid">
+        <div class="empty-state" style="grid-column:span 2">
+          <div class="empty-icon">⏳</div>Caricamento…
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: FOTO DI UN GIOCATORE -->
+  <div class="player-modal" id="modal-player">
+    <div class="player-modal-box">
+      <div class="player-modal-header">
+        <h3 id="modal-player-nome"></h3>
+        <button class="player-modal-close" id="modal-player-close">✕</button>
+      </div>
+      <div class="foto-grid-pub" id="modal-player-grid"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: FOTO GRANDE -->
+  <div class="modal-overlay" id="modal-foto">
+    <button class="modal-close" id="modal-foto-close">✕</button>
+    <img id="modal-foto-img" src="" alt="" />
+  </div>
+
+  <!-- NAV BOTTOM -->
   <nav class="nav-bottom">
     <a href="index.html" class="nav-item">
-      <span class="nav-icon">📸</span>
-      <span>Sfide</span>
+      <span class="nav-icon">📸</span><span>Sfide</span>
     </a>
     <a href="classifica.html" class="nav-item active">
-      <span class="nav-icon">🏆</span>
-      <span>Classifica</span>
+      <span class="nav-icon">🏆</span><span>Classifica</span>
     </a>
   </nav>
 
+  <div class="toast" id="toast"></div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/classifica.js?v=2"></script>
+  <script src="js/classifica.js?v=3"></script>
 
 </body>
 </html>

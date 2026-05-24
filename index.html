@@ -37,7 +37,9 @@
 
           <div class="form-group">
             <label for="player-name">Il tuo nome</label>
-            <input type="text" id="player-name" placeholder="Come ti chiami?" autocomplete="given-name" required />
+            <input type="text" id="player-name" list="nomi-list"
+                   placeholder="Cerca il tuo nome…" autocomplete="off" required />
+            <datalist id="nomi-list"></datalist>
           </div>
 
           <div class="form-group">
@@ -93,7 +95,7 @@
   <!-- SCRIPT -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/app.js?v=2"></script>
+  <script src="js/app.js?v=3"></script>
 
 </body>
 </html>
