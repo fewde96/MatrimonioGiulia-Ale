@@ -79,9 +79,13 @@
           <div class="form-group">
             <label>Foto</label>
             <div class="upload-area" id="upload-area">
-              <input type="file" id="foto-input" accept="image/*" required />
               <div class="upload-icon">📷</div>
-              <p class="upload-label">Tocca per scattare o scegliere dalla galleria</p>
+              <div class="upload-opts">
+                <button type="button" class="btn-upload-opt" id="btn-scatta">📷 Scatta foto</button>
+                <button type="button" class="btn-upload-opt" id="btn-galleria">🖼 Dalla galleria</button>
+              </div>
+              <input type="file" id="foto-camera" accept="image/*" capture="environment" style="display:none" />
+              <input type="file" id="foto-gallery" accept="image/*" style="display:none" />
             </div>
             <div class="upload-preview" id="upload-preview">
               <img id="preview-img" src="" alt="Anteprima foto" />

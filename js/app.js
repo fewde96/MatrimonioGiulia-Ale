@@ -13,7 +13,8 @@ let fotoFile = null;
 // --- DOM ---
 const sfideGrid    = document.getElementById('sfide-grid');
 const sfidaSelect  = document.getElementById('sfida-select');
-const fotoInput    = document.getElementById('foto-input');
+const fotoCamera   = document.getElementById('foto-camera');
+const fotoGallery  = document.getElementById('foto-gallery');
 const previewImg   = document.getElementById('preview-img');
 const uploadPreview = document.getElementById('upload-preview');
 const uploadForm   = document.getElementById('upload-form');
@@ -57,16 +58,20 @@ function popolaSelect() {
 }
 
 // ============================================================
-//  Anteprima foto
+//  Selezione foto (fotocamera o galleria)
 // ============================================================
-fotoInput.addEventListener('change', () => {
-  const file = fotoInput.files[0];
+document.getElementById('btn-scatta').addEventListener('click', () => fotoCamera.click());
+document.getElementById('btn-galleria').addEventListener('click', () => fotoGallery.click());
+
+function onFotoSelezionata(file) {
   if (!file) return;
   fotoFile = file;
-  const url = URL.createObjectURL(file);
-  previewImg.src = url;
+  previewImg.src = URL.createObjectURL(file);
   uploadPreview.style.display = 'block';
-});
+}
+
+fotoCamera.addEventListener('change', () => onFotoSelezionata(fotoCamera.files[0]));
+fotoGallery.addEventListener('change', () => onFotoSelezionata(fotoGallery.files[0]));
 
 // ============================================================
 //  Submit form
@@ -146,6 +151,8 @@ function resetForm() {
   uploadPreview.style.display = 'none';
   previewImg.src = '';
   sfidaSelect.value = '';
+  fotoCamera.value = '';
+  fotoGallery.value = '';
   const cerca = document.getElementById('nomi-cerca');
   if (cerca) cerca.value = '';
   ripristinaOpzioniNomi();
