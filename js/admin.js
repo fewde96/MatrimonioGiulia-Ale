@@ -41,9 +41,9 @@ document.getElementById('btn-logout').addEventListener('click', () => {
 
 function inizializzaSupabaseEMostra() {
   try {
-    supabaseClient = window.supabaseClient.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   } catch (e) {
-    alert('Errore connessione supabaseClient. Ricarica la pagina.');
+    alert('Errore connessione Supabase. Ricarica la pagina.');
     return;
   }
   mostraAdmin();
@@ -76,7 +76,7 @@ let tutteLeSubmissions = [];
 let filtroAttivo = '';
 
 async function caricaFoto() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('submissions')
     .select('*')
     .order('created_at', { ascending: false });
@@ -175,7 +175,7 @@ modal.addEventListener('click', e => { if (e.target === modal) modal.classList.r
 //  TAB CLASSIFICA
 // ============================================================
 async function caricaClassifica() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('submissions')
     .select('player_name, points');
 
@@ -218,7 +218,7 @@ async function caricaClassifica() {
 let sfide = [];
 
 async function caricaSfide() {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('sfide')
     .select('*')
     .order('ordine', { ascending: true });
@@ -249,7 +249,7 @@ async function salvaSfida(id) {
   const punti = parseInt(document.getElementById(`punti-${id}`).value, 10);
   if (!desc || !punti) return mostraToast('Compila descrizione e punti', 'error');
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from('sfide')
     .update({ descrizione: desc, punti })
     .eq('id', id);
@@ -275,7 +275,7 @@ document.getElementById('btn-aggiungi-sfida').addEventListener('click', async ()
 
   const ordine = sfide.length > 0 ? Math.max(...sfide.map(s => s.ordine || 0)) + 1 : 1;
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('sfide')
     .insert({ descrizione: desc, punti, ordine })
     .select()
