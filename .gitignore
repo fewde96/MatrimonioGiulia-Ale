@@ -1,2 +1,2 @@
-# Esclude le credenziali Supabase dal repository
-config.js
+# La anon key Supabase è pubblica per design — config.js è nel repo
+# Non committare mai la service_role key
