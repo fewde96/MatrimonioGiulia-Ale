@@ -20,7 +20,7 @@ function attivaTabClassifica() {
   // Titolo dinamico
   const titolo = document.getElementById('page-title');
   const sub    = document.getElementById('page-sub');
-  if (titolo) titolo.textContent = isGalleria ? '❤️ Foto più amate' : '🏆 Classifica';
+  if (titolo) titolo.textContent = isGalleria ? '📸 Galleria' : '🏆 Classifica';
   if (sub)    sub.style.display  = isGalleria ? 'none' : '';
 }
 window.addEventListener('hashchange', attivaTabClassifica);
