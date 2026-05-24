@@ -27,11 +27,6 @@
     <p class="hero-trashless">A Trashless Production Game</p>
   </header>
 
-  <div class="tab-bar-index">
-    <button class="tab-btn-index active" data-tab="sfide">📋 Le sfide</button>
-    <button class="tab-btn-index" data-tab="upload">📤 Carica foto</button>
-  </div>
-
   <!-- TAB: SFIDE -->
   <div class="tab-content-index active" id="tab-sfide">
     <div class="container">
@@ -106,13 +101,17 @@
 
   <!-- NAVIGAZIONE BOTTOM -->
   <nav class="nav-bottom">
-    <a href="index.html" class="nav-item active">
-      <span class="nav-icon">📸</span>
-      <span>Sfide</span>
+    <a href="index.html" class="nav-item" id="nav-sfide">
+      <span class="nav-icon">📋</span><span>Sfide</span>
     </a>
-    <a href="classifica.html" class="nav-item">
-      <span class="nav-icon">🏆</span>
-      <span>Classifica</span>
+    <a href="index.html#upload" class="nav-item" id="nav-upload">
+      <span class="nav-icon">📤</span><span>Carica</span>
+    </a>
+    <a href="classifica.html" class="nav-item" id="nav-classifica">
+      <span class="nav-icon">🏆</span><span>Classifica</span>
+    </a>
+    <a href="classifica.html#galleria" class="nav-item" id="nav-galleria">
+      <span class="nav-icon">📸</span><span>Galleria</span>
     </a>
   </nav>
 
@@ -124,14 +123,15 @@
   <script src="config.js?v=2"></script>
   <script src="js/app.js?v=5"></script>
   <script>
-    document.querySelectorAll('.tab-btn-index').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-btn-index').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content-index').forEach(c => c.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-      });
-    });
+    function attivaTabIndex() {
+      const isUpload = window.location.hash === '#upload';
+      document.querySelectorAll('.tab-content-index').forEach(c => c.classList.remove('active'));
+      document.getElementById(isUpload ? 'tab-upload' : 'tab-sfide').classList.add('active');
+      document.getElementById('nav-sfide').classList.toggle('active', !isUpload);
+      document.getElementById('nav-upload').classList.toggle('active', isUpload);
+    }
+    attivaTabIndex();
+    window.addEventListener('hashchange', attivaTabIndex);
   </script>
 
 </body>

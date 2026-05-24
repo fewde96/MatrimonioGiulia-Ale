@@ -49,10 +49,6 @@
   <header class="header-classifica">
     <h1>🏆 Classifica</h1>
     <p><span class="live-dot"></span>Aggiornamento in tempo reale</p>
-    <div class="tab-bar">
-      <button class="tab-btn active" data-tab="classifica">🏆 Classifica</button>
-      <button class="tab-btn" data-tab="galleria">📸 Galleria</button>
-    </div>
   </header>
 
   <!-- TAB: CLASSIFICA -->
@@ -100,11 +96,17 @@
 
   <!-- NAV BOTTOM -->
   <nav class="nav-bottom">
-    <a href="index.html" class="nav-item">
-      <span class="nav-icon">📸</span><span>Sfide</span>
+    <a href="index.html" class="nav-item" id="nav-sfide">
+      <span class="nav-icon">📋</span><span>Sfide</span>
     </a>
-    <a href="classifica.html" class="nav-item active">
+    <a href="index.html#upload" class="nav-item" id="nav-upload">
+      <span class="nav-icon">📤</span><span>Carica</span>
+    </a>
+    <a href="classifica.html" class="nav-item" id="nav-classifica">
       <span class="nav-icon">🏆</span><span>Classifica</span>
+    </a>
+    <a href="classifica.html#galleria" class="nav-item" id="nav-galleria">
+      <span class="nav-icon">📸</span><span>Galleria</span>
     </a>
   </nav>
 
@@ -112,7 +114,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/classifica.js?v=3"></script>
+  <script src="js/classifica.js?v=4"></script>
 
 </body>
 </html>

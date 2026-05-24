@@ -6,22 +6,19 @@ const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_
 const MEDAGLIE = ['🥇', '🥈', '🥉'];
 
 // ============================================================
-//  TAB
+//  TAB (attivazione da hash URL)
 // ============================================================
 let galleriaCaricata = false;
 
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-    if (btn.dataset.tab === 'galleria' && !galleriaCaricata) {
-      galleriaCaricata = true;
-      caricaGalleria();
-    }
-  });
-});
+function attivaTabClassifica() {
+  const isGalleria = window.location.hash === '#galleria';
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(isGalleria ? 'tab-galleria' : 'tab-classifica').classList.add('active');
+  document.getElementById('nav-classifica')?.classList.toggle('active', !isGalleria);
+  document.getElementById('nav-galleria')?.classList.toggle('active', isGalleria);
+  if (isGalleria && !galleriaCaricata) { galleriaCaricata = true; caricaGalleria(); }
+}
+window.addEventListener('hashchange', attivaTabClassifica);
 
 // ============================================================
 //  CLASSIFICA
@@ -220,3 +217,4 @@ supabaseClient
 
 // --- Avvio ---
 caricaClassifica();
+attivaTabClassifica();
