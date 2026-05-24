@@ -47,8 +47,8 @@
 <body>
 
   <header class="header-classifica">
-    <h1>🏆 Classifica</h1>
-    <p><span class="live-dot"></span>Aggiornamento in tempo reale</p>
+    <h1 id="page-title">🏆 Classifica</h1>
+    <p id="page-sub"><span class="live-dot"></span>Aggiornamento in tempo reale</p>
   </header>
 
   <!-- TAB: CLASSIFICA -->
@@ -64,11 +64,10 @@
   <!-- TAB: GALLERIA -->
   <div class="tab-content" id="tab-galleria">
     <div class="container">
-      <section id="top-foto-section" style="display:none">
-        <h2 class="section-title">❤️ Foto più amate</h2>
+      <p class="aggiornato" id="aggiornato-galleria">Caricamento…</p>
+      <div id="top-foto-section" style="display:none">
         <div class="foto-grid-pub" id="top-foto-grid"></div>
-      </section>
-      <h2 class="section-title">📸 Tutte le foto</h2>
+      </div>
       <div class="foto-grid-pub" id="galleria-grid">
         <div class="empty-state" style="grid-column:span 2">
           <div class="empty-icon">⏳</div>Caricamento…
@@ -114,7 +113,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/classifica.js?v=4"></script>
+  <script src="js/classifica.js?v=5"></script>
 
 </body>
 </html>

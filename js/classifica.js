@@ -17,6 +17,11 @@ function attivaTabClassifica() {
   document.getElementById('nav-classifica')?.classList.toggle('active', !isGalleria);
   document.getElementById('nav-galleria')?.classList.toggle('active', isGalleria);
   if (isGalleria && !galleriaCaricata) { galleriaCaricata = true; caricaGalleria(); }
+  // Titolo dinamico
+  const titolo = document.getElementById('page-title');
+  const sub    = document.getElementById('page-sub');
+  if (titolo) titolo.textContent = isGalleria ? '❤️ Foto più amate' : '🏆 Classifica';
+  if (sub)    sub.style.display  = isGalleria ? 'none' : '';
 }
 window.addEventListener('hashchange', attivaTabClassifica);
 
@@ -97,6 +102,12 @@ async function caricaGalleria() {
   const topFoto = data.filter(s => (s.likes_count || 0) > 0).slice(0, 3);
   renderTopFoto(topFoto, liked);
   grid.innerHTML = data.map(s => fotoCardHtml(s, liked, null)).join('');
+
+  const agg = document.getElementById('aggiornato-galleria');
+  if (agg) {
+    const ora = new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+    agg.textContent = 'Ultimo aggiornamento: ' + ora;
+  }
 }
 
 function renderTopFoto(topFoto, liked) {
