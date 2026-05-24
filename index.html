@@ -4,8 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#C4A09A" />
-  <title>Giulia & Alessandro — Gioco Fotografico</title>
+  <title>Wedding Paparazzi — Giulia &amp; Alessandro</title>
   <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .hero-tagline { font-size:1rem; color:var(--rosa-soft); letter-spacing:0.14em; text-transform:uppercase; font-weight:700; margin-top:0.4rem; }
+    .hero-trashless { position:absolute; bottom:0.7rem; right:1rem; font-size:0.6rem; color:rgba(255,255,255,0.3); letter-spacing:0.06em; font-style:italic; }
+    .tab-bar-index { display:flex; background:var(--antracite); }
+    .tab-btn-index { flex:1; padding:0.7rem 0.5rem; border:none; background:none; color:rgba(255,255,255,0.45); font-size:0.85rem; font-weight:600; cursor:pointer; border-bottom:2px solid transparent; transition:color 0.2s; -webkit-tap-highlight-color:transparent; }
+    .tab-btn-index.active { color:var(--rosa-soft); border-bottom-color:var(--rosa); }
+    .tab-content-index { display:none; }
+    .tab-content-index.active { display:block; }
+  </style>
 </head>
 <body>
 
@@ -13,12 +22,18 @@
   <header class="hero">
     <div class="hero-content">
       <h1 class="hero-nomi"><span>Giulia</span> &amp; <span>Alessandro</span></h1>
-      <p class="hero-sub">Gioco Fotografico</p>
-      <p class="hero-castle">Castello di Torre Alfina</p>
+      <p class="hero-tagline">Wedding Paparazzi</p>
+    </div>
+    <p class="hero-trashless">A Trashless Production Game</p>
+    <div class="tab-bar-index">
+      <button class="tab-btn-index active" data-tab="sfide">📋 Le sfide</button>
+      <button class="tab-btn-index" data-tab="upload">📤 Carica foto</button>
     </div>
   </header>
 
-  <main class="container">
+  <!-- TAB: SFIDE -->
+  <div class="tab-content-index active" id="tab-sfide">
+    <div class="container">
 
     <!-- SFIDE -->
     <section id="sezione-sfide">
@@ -28,6 +43,13 @@
         <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento sfide…</div>
       </div>
     </section>
+
+    </div>
+  </div>
+
+  <!-- TAB: UPLOAD -->
+  <div class="tab-content-index" id="tab-upload">
+    <div class="container">
 
     <!-- FORM UPLOAD -->
     <section id="sezione-upload">
@@ -55,7 +77,7 @@
 
           <div class="form-group">
             <label for="caption">Didascalia <span style="font-weight:400;text-transform:none">(opzionale)</span></label>
-            <textarea id="caption" placeholder="Scrivi qualcosa di divertente…"></textarea>
+            <textarea id="caption" placeholder="Lascia un messaggio agli sposi!"></textarea>
           </div>
 
           <div class="form-group">
@@ -78,7 +100,8 @@
       </div>
     </section>
 
-  </main>
+    </div>
+  </div>
 
   <!-- NAVIGAZIONE BOTTOM -->
   <nav class="nav-bottom">
@@ -99,6 +122,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
   <script src="js/app.js?v=5"></script>
+  <script>
+    document.querySelectorAll('.tab-btn-index').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn-index').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content-index').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
 
 </body>
 </html>
