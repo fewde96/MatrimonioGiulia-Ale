@@ -73,7 +73,7 @@ fotoInput.addEventListener('change', () => {
 uploadForm.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const playerName = (document.getElementById('nomi-select').value || '').trim();
+  const playerName = (document.getElementById('nomi-input').dataset.selected || '').trim();
   const sfidaId    = parseInt(sfidaSelect.value, 10);
   const caption    = document.getElementById('caption').value.trim();
 
@@ -145,9 +145,10 @@ function resetForm() {
   uploadPreview.style.display = 'none';
   previewImg.src = '';
   sfidaSelect.value = '';
-  const cerca = document.getElementById('nomi-cerca');
-  if (cerca) cerca.value = '';
-  ripristinaOpzioniNomi();
+  const input = document.getElementById('nomi-input');
+  if (input) { input.value = ''; delete input.dataset.selected; input.classList.remove('nome-input-invalid'); }
+  const dropdown = document.getElementById('nome-dropdown');
+  if (dropdown) dropdown.classList.remove('open');
 }
 
 let toastTimer;
@@ -165,41 +166,75 @@ caricaSfide();
 caricaPartecipanti();
 
 // ============================================================
-//  Caricamento partecipanti + select con filtro
+//  Caricamento partecipanti + autocomplete campo singolo
 // ============================================================
 async function caricaPartecipanti() {
   try {
     const res = await fetch('partecipanti.json?v=2');
     if (!res.ok) return;
     partecipanti = await res.json();
-    popolaSelectNomi(partecipanti);
-    inizializzaFiltroNomi();
+    inizializzaAutocomplete();
   } catch (e) {
     console.warn('partecipanti.json non trovato', e);
   }
 }
 
-function popolaSelectNomi(lista) {
-  const sel = document.getElementById('nomi-select');
-  if (!sel) return;
-  const corrente = sel.value;
-  sel.innerHTML = '<option value="">— Scegli il tuo nome —</option>' +
-    lista.map(n => `<option value="${n}"${n === corrente ? ' selected' : ''}>${n}</option>`).join('');
-}
+function inizializzaAutocomplete() {
+  const input    = document.getElementById('nomi-input');
+  const dropdown = document.getElementById('nome-dropdown');
+  if (!input || !dropdown) return;
 
-function ripristinaOpzioniNomi() {
-  popolaSelectNomi(partecipanti);
-}
-
-function inizializzaFiltroNomi() {
-  const cerca = document.getElementById('nomi-cerca');
-  if (!cerca) return;
-  cerca.addEventListener('input', () => {
-    const q = cerca.value.toLowerCase();
-    const filtrati = q
-      ? partecipanti.filter(n => n.toLowerCase().includes(q))
+  function mostraOpzioni(filtro) {
+    const lista = filtro
+      ? partecipanti.filter(n => n.toLowerCase().includes(filtro.toLowerCase()))
       : partecipanti;
-    popolaSelectNomi(filtrati);
+    if (!lista.length) { dropdown.classList.remove('open'); return; }
+    dropdown.innerHTML = lista
+      .map(n => `<div class="nome-option" data-nome="${n}">${evidenzia(n, filtro)}</div>`)
+      .join('');
+    dropdown.classList.add('open');
+  }
+
+  function evidenzia(nome, q) {
+    if (!q) return nome;
+    const i = nome.toLowerCase().indexOf(q.toLowerCase());
+    if (i === -1) return nome;
+    return nome.slice(0, i) + '<strong>' + nome.slice(i, i + q.length) + '</strong>' + nome.slice(i + q.length);
+  }
+
+  function seleziona(nome) {
+    input.value = nome;
+    input.dataset.selected = nome;
+    input.classList.remove('nome-input-invalid');
+    dropdown.classList.remove('open');
+  }
+
+  input.addEventListener('focus', () => mostraOpzioni(input.value));
+  input.addEventListener('input', () => {
+    delete input.dataset.selected;
+    mostraOpzioni(input.value);
+  });
+
+  // Evita che il blur chiuda il dropdown prima che il click registri
+  dropdown.addEventListener('mousedown', e => e.preventDefault());
+  dropdown.addEventListener('click', e => {
+    const opt = e.target.closest('.nome-option');
+    if (opt) seleziona(opt.dataset.nome);
+  });
+  dropdown.addEventListener('touchstart', e => e.preventDefault(), { passive: false });
+  dropdown.addEventListener('touchend', e => {
+    const opt = e.target.closest('.nome-option');
+    if (opt) { e.preventDefault(); seleziona(opt.dataset.nome); }
+  });
+
+  input.addEventListener('blur', () => {
+    setTimeout(() => dropdown.classList.remove('open'), 150);
+    // Se il testo corrisponde esattamente a un nome (case-insensitive), accettalo
+    const match = partecipanti.find(n => n.toLowerCase() === input.value.toLowerCase());
+    if (match) { seleziona(match); }
+    else if (input.value && !input.dataset.selected) {
+      input.classList.add('nome-input-invalid');
+    }
   });
 }
 

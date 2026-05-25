@@ -52,13 +52,12 @@
         <form id="upload-form" novalidate>
 
           <div class="form-group">
-            <label for="nomi-select">Il tuo nome</label>
-            <input type="text" id="nomi-cerca"
-                   placeholder="🔍 Filtra nome…" autocomplete="off"
-                   style="margin-bottom:0.5rem" />
-            <select id="nomi-select" required>
-              <option value="">— Scegli il tuo nome —</option>
-            </select>
+            <label for="nomi-input">Il tuo nome</label>
+            <div class="nome-select-wrapper">
+              <input type="text" id="nomi-input"
+                     placeholder="Cerca il tuo nome…" autocomplete="off" />
+              <div class="nome-dropdown" id="nome-dropdown"></div>
+            </div>
           </div>
 
           <div class="form-group">
@@ -119,7 +118,7 @@
   <!-- SCRIPT -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/app.js?v=6"></script>
+  <script src="js/app.js?v=7"></script>
   <script>
     function attivaTabIndex() {
       const isUpload = window.location.hash === '#upload';
