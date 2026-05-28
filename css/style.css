@@ -169,13 +169,13 @@ a {
 }
 
 .sfida-card-high {
-  border-left-color: var(--oro);
-  box-shadow: 0 2px 12px rgba(184, 151, 90, 0.16);
+  border-left-color: #6f8f80;
+  box-shadow: 0 2px 12px rgba(111, 143, 128, 0.18);
 }
 
 .sfida-card-high .sfida-punti {
-  background: var(--oro-soft);
-  color: var(--oro);
+  background: #e5efe9;
+  color: #4f6e60;
 }
 
 .sfida-card-very-high {
