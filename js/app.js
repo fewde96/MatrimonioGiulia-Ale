@@ -90,6 +90,17 @@ uploadForm.addEventListener('submit', async (e) => {
   submitBtn.innerHTML = '<span class="spinner"></span>Caricamento…';
 
   try {
+    // Assegna i punti una sola volta per categoria e partecipante.
+    const { data: existingSubmission, error: checkError } = await supabaseClient
+      .from('submissions')
+      .select('id')
+      .eq('player_name', playerName)
+      .eq('category', sfida.descrizione)
+      .limit(1);
+
+    if (checkError) throw checkError;
+    const pointsToAssign = existingSubmission && existingSubmission.length > 0 ? 0 : sfida.punti;
+
     // 1. Upload foto su Supabase Storage (qualità originale, nessuna compressione)
     const ext      = fotoFile.name.split('.').pop().toLowerCase();
     const safeName = playerName.replace(/[^a-z0-9]/gi, '_').toLowerCase();
@@ -116,7 +127,7 @@ uploadForm.addEventListener('submit', async (e) => {
       .insert({
         player_name: playerName,
         category:    sfida.descrizione,
-        points:      sfida.punti,
+        points:      pointsToAssign,
         photo_url:   photoUrl,
         caption:     caption || null,
       });
@@ -124,7 +135,11 @@ uploadForm.addEventListener('submit', async (e) => {
     if (dbError) throw dbError;
 
     // Successo
-    mostraToast(`+${sfida.punti} punti! Foto caricata 🎉`, 'success');
+    if (pointsToAssign > 0) {
+      mostraToast(`+${pointsToAssign} punti! Foto caricata 🎉`, 'success');
+    } else {
+      mostraToast('Foto caricata! Punti gia assegnati per questa categoria.', 'success');
+    }
     resetForm();
 
   } catch (err) {
