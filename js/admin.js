@@ -255,6 +255,12 @@ async function caricaClassifica() {
 // ============================================================
 let sfide = [];
 
+function normalizeSfidaTag(tag) {
+  const value = String(tag || '').trim().toLowerCase();
+  if (value === 'new' || value === 'hide') return value;
+  return '';
+}
+
 async function caricaSfide() {
   const { data, error } = await supabaseClient
     .from('sfide')
@@ -276,6 +282,11 @@ function renderSfideEditor() {
     <div class="sfida-row" id="sfida-row-${s.id}">
       <input type="text"   value="${s.descrizione}" id="desc-${s.id}"  placeholder="Descrizione" />
       <input type="number" value="${s.punti}"        id="punti-${s.id}" min="1" max="20" />
+      <select id="tag-${s.id}">
+        <option value="" ${normalizeSfidaTag(s.tag) === '' ? 'selected' : ''}>Nessuno</option>
+        <option value="new" ${normalizeSfidaTag(s.tag) === 'new' ? 'selected' : ''}>NEW</option>
+        <option value="hide" ${normalizeSfidaTag(s.tag) === 'hide' ? 'selected' : ''}>HIDE</option>
+      </select>
       <button class="btn-sm btn-sfida-save" onclick="salvaSfida(${s.id})">✓</button>
       <button class="btn-sm btn-sfida-del"  onclick="eliminaSfida(${s.id})">🗑</button>
     </div>
@@ -285,15 +296,16 @@ function renderSfideEditor() {
 async function salvaSfida(id) {
   const desc  = document.getElementById(`desc-${id}`).value.trim();
   const punti = parseInt(document.getElementById(`punti-${id}`).value, 10);
+  const tag   = normalizeSfidaTag(document.getElementById(`tag-${id}`).value);
   if (!desc || !punti) return mostraToast('Compila descrizione e punti', 'error');
 
   const { error } = await supabaseClient
     .from('sfide')
-    .update({ descrizione: desc, punti })
+    .update({ descrizione: desc, punti, tag: tag || null })
     .eq('id', id);
 
   if (error) { mostraToast('Errore salvataggio', 'error'); return; }
-  sfide = sfide.map(s => s.id === id ? { ...s, descrizione: desc, punti } : s);
+  sfide = sfide.map(s => s.id === id ? { ...s, descrizione: desc, punti, tag: tag || null } : s);
   mostraToast('Sfida aggiornata ✓', 'success');
 }
 
@@ -309,13 +321,14 @@ async function eliminaSfida(id) {
 document.getElementById('btn-aggiungi-sfida').addEventListener('click', async () => {
   const desc  = document.getElementById('nuova-desc').value.trim();
   const punti = parseInt(document.getElementById('nuovi-punti').value, 10);
+  const tag   = normalizeSfidaTag(document.getElementById('nuovo-tag').value);
   if (!desc || !punti) return mostraToast('Compila descrizione e punti', 'error');
 
   const ordine = sfide.length > 0 ? Math.max(...sfide.map(s => s.ordine || 0)) + 1 : 1;
 
   const { data, error } = await supabaseClient
     .from('sfide')
-    .insert({ descrizione: desc, punti, ordine })
+    .insert({ descrizione: desc, punti, ordine, tag: tag || null })
     .select()
     .single();
 
@@ -324,6 +337,7 @@ document.getElementById('btn-aggiungi-sfida').addEventListener('click', async ()
   renderSfideEditor();
   document.getElementById('nuova-desc').value  = '';
   document.getElementById('nuovi-punti').value = '2';
+  document.getElementById('nuovo-tag').value = '';
   mostraToast('Sfida aggiunta ✓', 'success');
 });
 

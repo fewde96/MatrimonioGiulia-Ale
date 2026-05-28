@@ -26,7 +26,7 @@ const toast        = document.getElementById('toast');
 async function caricaSfide() {
   const { data, error } = await supabaseClient
     .from('sfide')
-    .select('id, descrizione, punti')
+    .select('*')
     .order('ordine', { ascending: true });
 
   if (error || !data || data.length === 0) {
@@ -48,17 +48,30 @@ function getSfidaClasse(punti) {
   return 'sfida-card-top';
 }
 
+function normalizeSfidaTag(tag) {
+  return String(tag || '').trim().toLowerCase();
+}
+
 function renderSfide() {
-  sfideGrid.innerHTML = sfide.map(s => `
+  const sfideVisibili = sfide.filter(s => normalizeSfidaTag(s.tag) !== 'hide');
+  sfideGrid.innerHTML = sfideVisibili.map(s => `
     <div class="sfida-card ${getSfidaClasse(s.punti)}">
       <span class="sfida-desc">${s.descrizione}</span>
-      <span class="sfida-punti">+${s.punti} pt</span>
+      <span class="sfida-meta">
+        ${normalizeSfidaTag(s.tag) === 'new' ? '<span class="sfida-badge-new">🆕 NEW</span>' : ''}
+        <span class="sfida-punti">+${s.punti} pt</span>
+      </span>
     </div>
   `).join('');
+
+  if (sfideVisibili.length === 0) {
+    sfideGrid.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>Al momento non ci sono sfide visibili.</div>`;
+  }
 }
 
 function popolaSelect() {
-  const opzioni = sfide.map(s =>
+  const sfideVisibili = sfide.filter(s => normalizeSfidaTag(s.tag) !== 'hide');
+  const opzioni = sfideVisibili.map(s =>
     `<option value="${s.id}">${s.descrizione} (+${s.punti} pt)</option>`
   ).join('');
   sfidaSelect.innerHTML = '<option value="">— Scegli una sfida —</option>' + opzioni;

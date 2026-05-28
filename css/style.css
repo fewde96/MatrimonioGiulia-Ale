@@ -203,6 +203,25 @@ a {
   flex: 1;
 }
 
+.sfida-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.sfida-badge-new {
+  display: inline-block;
+  background: #fff4e0;
+  color: #c76b1b;
+  border: 1px solid #f3c391;
+  border-radius: 999px;
+  padding: 0.2rem 0.48rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
 .sfida-punti {
   background: var(--oro-soft);
   color: var(--oro);
