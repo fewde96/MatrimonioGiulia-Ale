@@ -575,3 +575,38 @@ select {
   background: #fff5f5 !important;
 }
 
+/* ---------- Landing ---------- */
+.landing-container {
+  padding-bottom: 2rem;
+}
+
+.landing-card {
+  margin-bottom: 1rem;
+}
+
+.landing-intro {
+  color: var(--antracite);
+  margin-bottom: 0.9rem;
+}
+
+.landing-steps {
+  margin-left: 1.15rem;
+  color: var(--grigio);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.landing-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.landing-note {
+  margin-top: 0.9rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--grigio);
+}
+

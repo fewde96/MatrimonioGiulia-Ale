@@ -4,21 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#C4A09A" />
-  <title>Wedding Paparazzi — Giulia &amp; Alessandro</title>
+  <title>Benvenuti — Giulia &amp; Alessandro</title>
   <link rel="stylesheet" href="css/style.css" />
   <style>
     .hero-tagline { font-size:1rem; color:var(--rosa-soft); letter-spacing:0.14em; text-transform:uppercase; font-weight:700; margin-top:0.4rem; }
     .hero-trashless { position:absolute; bottom:0.7rem; right:1rem; font-size:0.6rem; color:rgba(255,255,255,0.3); letter-spacing:0.06em; font-style:italic; }
-    .tab-bar-index { display:flex; background:var(--antracite); }
-    .tab-btn-index { flex:1; padding:0.7rem 0.5rem; border:none; background:none; color:rgba(255,255,255,0.45); font-size:0.85rem; font-weight:600; cursor:pointer; border-bottom:2px solid transparent; transition:color 0.2s; -webkit-tap-highlight-color:transparent; }
-    .tab-btn-index.active { color:var(--rosa-soft); border-bottom-color:var(--rosa); }
-    .tab-content-index { display:none; }
-    .tab-content-index.active { display:block; }
   </style>
 </head>
 <body>
 
-  <!-- HERO -->
   <header class="hero">
     <div class="hero-content">
       <h1 class="hero-nomi"><span>Giulia</span> &amp; <span>Alessandro</span></h1>
@@ -27,109 +21,29 @@
     <p class="hero-trashless">A Trashless Production Game</p>
   </header>
 
-  <!-- TAB: SFIDE -->
-  <div class="tab-content-index active" id="tab-sfide">
-    <div class="container">
-
-    <!-- SFIDE -->
-    <section id="sezione-sfide">
-      <div class="sfide-grid" id="sfide-grid">
-        <!-- Popolato da app.js -->
-        <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento sfide…</div>
-      </div>
+  <main class="container landing-container">
+    <section class="card landing-card">
+      <h2 class="section-title">Come funziona</h2>
+      <p class="landing-intro">
+        Durante la festa completa le sfide fotografiche, carica i tuoi scatti e fai guadagnare punti al tuo nome.
+      </p>
+      <ol class="landing-steps">
+        <li>Apri il gioco e guarda la lista delle sfide.</li>
+        <li>Scatta una foto mentre completi una sfida.</li>
+        <li>Carica la foto e scala la classifica in tempo reale.</li>
+      </ol>
     </section>
 
-    </div>
-  </div>
-
-  <!-- TAB: UPLOAD -->
-  <div class="tab-content-index" id="tab-upload">
-    <div class="container">
-
-    <!-- FORM UPLOAD -->
-    <section id="sezione-upload">
-      <div class="card">
-        <form id="upload-form" novalidate>
-
-          <div class="form-group">
-            <label for="nomi-input">Il tuo nome</label>
-            <div class="nome-select-wrapper">
-              <input type="text" id="nomi-input"
-                     placeholder="Cerca il tuo nome…" autocomplete="off" />
-              <div class="nome-dropdown" id="nome-dropdown"></div>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="sfida-select">Sfida completata</label>
-            <select id="sfida-select" required>
-              <option value="">— Scegli una sfida —</option>
-              <!-- Popolato da app.js -->
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="caption">Didascalia <span style="font-weight:400;text-transform:none">(opzionale)</span></label>
-            <textarea id="caption" placeholder="Lascia un messaggio agli sposi!"></textarea>
-          </div>
-
-          <div class="form-group">
-            <label>Foto</label>
-            <div class="upload-area" id="upload-area">
-              <input type="file" id="foto-input" accept="image/*" />
-              <div class="upload-icon">📷</div>
-              <p class="upload-label">Tocca per scattare o scegliere dalla galleria</p>
-            </div>
-            <div class="upload-preview" id="upload-preview">
-              <img id="preview-img" src="" alt="Anteprima foto" />
-            </div>
-          </div>
-
-          <button type="submit" class="btn btn-primary" id="submit-btn">
-            Carica la foto
-          </button>
-
-        </form>
+    <section class="card landing-card">
+      <h2 class="section-title">Inizia subito</h2>
+      <div class="landing-actions">
+        <a class="btn btn-primary" href="gioco.html">Vai al gioco</a>
+        <a class="btn btn-secondary" href="classifica.html">Guarda classifica</a>
+        <a class="btn btn-secondary" href="classifica.html#galleria">Apri la galleria</a>
       </div>
+      <p class="landing-note">Area organizzazione: <a href="admin.html">accesso admin</a></p>
     </section>
-
-    </div>
-  </div>
-
-  <!-- NAVIGAZIONE BOTTOM -->
-  <nav class="nav-bottom">
-    <a href="index.html" class="nav-item" id="nav-sfide">
-      <span class="nav-icon">📋</span><span>Sfide</span>
-    </a>
-    <a href="index.html#upload" class="nav-item" id="nav-upload">
-      <span class="nav-icon">📤</span><span>Carica</span>
-    </a>
-    <a href="classifica.html" class="nav-item" id="nav-classifica">
-      <span class="nav-icon">🏆</span><span>Classifica</span>
-    </a>
-    <a href="classifica.html#galleria" class="nav-item" id="nav-galleria">
-      <span class="nav-icon">📸</span><span>Galleria</span>
-    </a>
-  </nav>
-
-  <!-- TOAST -->
-  <div class="toast" id="toast"></div>
-
-  <!-- SCRIPT -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script src="config.js?v=2"></script>
-  <script src="js/app.js?v=7"></script>
-  <script>
-    function attivaTabIndex() {
-      const isUpload = window.location.hash === '#upload';
-      document.querySelectorAll('.tab-content-index').forEach(c => c.classList.remove('active'));
-      document.getElementById(isUpload ? 'tab-upload' : 'tab-sfide').classList.add('active');
-      document.getElementById('nav-sfide').classList.toggle('active', !isUpload);
-      document.getElementById('nav-upload').classList.toggle('active', isUpload);
-    }
-    attivaTabIndex();
-    window.addEventListener('hashchange', attivaTabIndex);
-  </script>
+  </main>
 
 </body>
 </html>
