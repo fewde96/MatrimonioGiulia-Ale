@@ -586,15 +586,34 @@ select {
 
 .landing-intro {
   color: var(--antracite);
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
+  font-size: 1.04rem;
+  line-height: 1.55;
 }
 
 .landing-steps {
-  margin-left: 1.15rem;
-  color: var(--grigio);
+  margin-left: 1.3rem;
+  color: var(--antracite);
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.55rem;
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+.landing-steps li::marker {
+  color: var(--rosa);
+  font-weight: 700;
+}
+
+.landing-tip {
+  margin-top: 0.95rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid var(--rosa-soft);
+  background: var(--avorio);
+  color: var(--grigio);
+  font-size: 0.92rem;
 }
 
 .landing-actions {
