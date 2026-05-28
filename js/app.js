@@ -35,14 +35,22 @@ async function caricaSfide() {
     return;
   }
 
-  sfide = data;
+  sfide = [...data].sort((a, b) => a.punti - b.punti || a.id - b.id);
   renderSfide();
   popolaSelect();
 }
 
+function getSfidaClasse(punti) {
+  if (punti <= 3) return 'sfida-card-low';
+  if (punti <= 5) return 'sfida-card-mid';
+  if (punti <= 7) return 'sfida-card-high';
+  if (punti <= 9) return 'sfida-card-very-high';
+  return 'sfida-card-top';
+}
+
 function renderSfide() {
   sfideGrid.innerHTML = sfide.map(s => `
-    <div class="sfida-card">
+    <div class="sfida-card ${getSfidaClasse(s.punti)}">
       <span class="sfida-desc">${s.descrizione}</span>
       <span class="sfida-punti">+${s.punti} pt</span>
     </div>

@@ -148,6 +148,56 @@ a {
   gap: 0.8rem;
 }
 
+.sfida-card-low {
+  border-left-color: #9b9b9b;
+  box-shadow: 0 2px 12px rgba(155, 155, 155, 0.14);
+}
+
+.sfida-card-low .sfida-punti {
+  background: #ececec;
+  color: #6d6d6d;
+}
+
+.sfida-card-mid {
+  border-left-color: var(--rosa);
+  box-shadow: 0 2px 12px rgba(196, 160, 154, 0.16);
+}
+
+.sfida-card-mid .sfida-punti {
+  background: #f6e7e3;
+  color: #b67568;
+}
+
+.sfida-card-high {
+  border-left-color: var(--oro);
+  box-shadow: 0 2px 12px rgba(184, 151, 90, 0.16);
+}
+
+.sfida-card-high .sfida-punti {
+  background: var(--oro-soft);
+  color: var(--oro);
+}
+
+.sfida-card-very-high {
+  border-left-color: #c77d4a;
+  box-shadow: 0 2px 12px rgba(199, 125, 74, 0.18);
+}
+
+.sfida-card-very-high .sfida-punti {
+  background: #fae7da;
+  color: #b35d2f;
+}
+
+.sfida-card-top {
+  border-left-color: var(--oro);
+  box-shadow: 0 2px 12px rgba(184, 151, 90, 0.22);
+}
+
+.sfida-card-top .sfida-punti {
+  background: var(--oro);
+  color: var(--bianco);
+}
+
 .sfida-desc {
   font-size: 0.95rem;
   flex: 1;
