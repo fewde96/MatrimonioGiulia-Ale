@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <meta name="theme-color" content="#2E2A29" />
   <title>Admin — Giulia & Alessandro</title>
-  <link rel="stylesheet" href="css/style.css?v=4" />
+  <link rel="stylesheet" href="css/style.css?v=5" />
   <style>
     body { background: var(--avorio); }
 
@@ -150,7 +150,7 @@
     }
     .sfida-row input[type="text"]   { flex: 1; font-size: 0.9rem; }
     .sfida-row input[type="number"] { width: 60px; text-align: center; }
-    .sfida-row select { width: 95px; font-size: 0.78rem; padding: 0.45rem 0.55rem; }
+    .sfida-row select { width: 110px; font-size: 0.78rem; padding: 0.45rem 0.55rem; }
     .btn-sfida-save { background: var(--rosa-soft); color: var(--rosa); }
     .btn-sfida-del  { background: #fdecea; color: #c0392b; }
 
@@ -258,11 +258,18 @@
           <input type="number" id="nuovi-punti" min="1" max="10" value="2" style="width:100px" />
         </div>
         <div class="form-group">
-          <label>Tag</label>
-          <select id="nuovo-tag" style="width:150px">
+          <label>Tag interno (non visibile utenti)</label>
+          <select id="nuovo-tag" style="width:170px">
             <option value="">Nessuno</option>
-            <option value="new">NEW</option>
             <option value="hide">HIDE</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Tag visibile utenti</label>
+          <select id="nuovo-tag-visibile" style="width:170px">
+            <option value="general" selected>General</option>
+            <option value="mattina">Mattina</option>
+            <option value="pomeriggio">Pomeriggio</option>
           </select>
         </div>
         <button class="btn btn-primary" id="btn-aggiungi-sfida">Aggiungi sfida</button>
@@ -282,7 +289,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/admin.js?v=4"></script>
+  <script src="js/admin.js?v=5"></script>
 
 </body>
 </html>

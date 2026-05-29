@@ -209,17 +209,32 @@ a {
   gap: 0.45rem;
 }
 
-.sfida-badge-new {
+.sfida-badge-tempo {
   display: inline-block;
-  background: #fff4e0;
-  color: #c76b1b;
-  border: 1px solid #f3c391;
   border-radius: 999px;
   padding: 0.2rem 0.48rem;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   white-space: nowrap;
+}
+
+.sfida-badge-tempo-mattina {
+  background: #e8f3ff;
+  color: #2f6da8;
+  border: 1px solid #bbd9f7;
+}
+
+.sfida-badge-tempo-pomeriggio {
+  background: #fff1e6;
+  color: #b8672e;
+  border: 1px solid #f3c9a7;
+}
+
+.sfida-badge-tempo-general {
+  background: #edf6ee;
+  color: #4f7a58;
+  border: 1px solid #c8dfcc;
 }
 
 .sfida-punti {
@@ -683,6 +698,17 @@ select {
   background: var(--avorio);
   color: var(--grigio);
   font-size: 0.92rem;
+}
+
+.landing-alert-time {
+  margin-top: 0.95rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid #efd2b8;
+  background: #fff6ee;
+  color: #8f5e35;
+  font-size: 0.93rem;
+  line-height: 1.45;
 }
 
 .landing-actions {

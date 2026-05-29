@@ -52,13 +52,29 @@ function normalizeSfidaTag(tag) {
   return String(tag || '').trim().toLowerCase();
 }
 
+function normalizeVisibleTag(tag) {
+  const value = String(tag || '').trim().toLowerCase();
+  if (value === 'mattina' || value === 'pomeriggio' || value === 'general') return value;
+  return 'general';
+}
+
+function getVisibleTagLabel(tag) {
+  if (tag === 'mattina') return 'Mattina';
+  if (tag === 'pomeriggio') return 'Pomeriggio';
+  return 'Generale';
+}
+
+function getSfidaVisibleTag(sfida) {
+  return normalizeVisibleTag(sfida.tag_visibile);
+}
+
 function renderSfide() {
   const sfideVisibili = sfide.filter(s => normalizeSfidaTag(s.tag) !== 'hide');
   sfideGrid.innerHTML = sfideVisibili.map(s => `
     <div class="sfida-card ${getSfidaClasse(s.punti)}">
       <span class="sfida-desc">${s.descrizione}</span>
       <span class="sfida-meta">
-        ${normalizeSfidaTag(s.tag) === 'new' ? '<span class="sfida-badge-new">🆕 NEW</span>' : ''}
+        <span class="sfida-badge-tempo sfida-badge-tempo-${getSfidaVisibleTag(s)}">${getVisibleTagLabel(getSfidaVisibleTag(s))}</span>
         <span class="sfida-punti">+${s.punti} pt</span>
       </span>
     </div>

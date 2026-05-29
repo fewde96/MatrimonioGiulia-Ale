@@ -257,8 +257,62 @@ let sfide = [];
 
 function normalizeSfidaTag(tag) {
   const value = String(tag || '').trim().toLowerCase();
-  if (value === 'new' || value === 'hide') return value;
+  if (value === 'hide') return value;
   return '';
+}
+
+function normalizeVisibleSfidaTag(tag) {
+  const value = String(tag || '').trim().toLowerCase();
+  if (value === 'mattina' || value === 'pomeriggio' || value === 'general') return value;
+  return 'general';
+}
+
+function getVisibleTagFromSfida(sfida) {
+  return normalizeVisibleSfidaTag(sfida.tag_visibile);
+}
+
+async function aggiornaSfidaConFallback(id, payloadCompleto, payloadFallback) {
+  const firstTry = await supabaseClient
+    .from('sfide')
+    .update(payloadCompleto)
+    .eq('id', id);
+
+  if (!firstTry.error) return { ...firstTry, usedFallback: false };
+
+  const columnMissing = String(firstTry.error.message || '').toLowerCase().includes('tag_visibile');
+  if (!columnMissing) return { ...firstTry, usedFallback: false };
+
+  const secondTry = await supabaseClient
+    .from('sfide')
+    .update(payloadFallback)
+    .eq('id', id);
+
+  return { ...secondTry, usedFallback: !secondTry.error };
+}
+
+async function inserisciSfidaConFallback(payloadCompleto, payloadFallback) {
+  const firstTry = await supabaseClient
+    .from('sfide')
+    .insert(payloadCompleto)
+    .select()
+    .single();
+
+  if (!firstTry.error) return { ...firstTry, usedFallback: false };
+
+  const columnMissing = String(firstTry.error.message || '').toLowerCase().includes('tag_visibile');
+  if (!columnMissing) return { ...firstTry, usedFallback: false };
+
+  const secondTry = await supabaseClient
+    .from('sfide')
+    .insert(payloadFallback)
+    .select()
+    .single();
+
+  return { ...secondTry, usedFallback: !secondTry.error };
+}
+
+function mostraToastTagVisibileFallback() {
+  mostraToast('Salvato. Campo tag_visibile mancante su DB: usato fallback.', 'error');
 }
 
 async function caricaSfide() {
@@ -282,10 +336,14 @@ function renderSfideEditor() {
     <div class="sfida-row" id="sfida-row-${s.id}">
       <input type="text"   value="${s.descrizione}" id="desc-${s.id}"  placeholder="Descrizione" />
       <input type="number" value="${s.punti}"        id="punti-${s.id}" min="1" max="20" />
-      <select id="tag-${s.id}">
+      <select id="tag-${s.id}" title="Tag interno">
         <option value="" ${normalizeSfidaTag(s.tag) === '' ? 'selected' : ''}>Nessuno</option>
-        <option value="new" ${normalizeSfidaTag(s.tag) === 'new' ? 'selected' : ''}>NEW</option>
         <option value="hide" ${normalizeSfidaTag(s.tag) === 'hide' ? 'selected' : ''}>HIDE</option>
+      </select>
+      <select id="tag-visibile-${s.id}" title="Tag visibile utenti">
+        <option value="general" ${getVisibleTagFromSfida(s) === 'general' ? 'selected' : ''}>General</option>
+        <option value="mattina" ${getVisibleTagFromSfida(s) === 'mattina' ? 'selected' : ''}>Mattina</option>
+        <option value="pomeriggio" ${getVisibleTagFromSfida(s) === 'pomeriggio' ? 'selected' : ''}>Pomeriggio</option>
       </select>
       <button class="btn-sm btn-sfida-save" onclick="salvaSfida(${s.id})">✓</button>
       <button class="btn-sm btn-sfida-del"  onclick="eliminaSfida(${s.id})">🗑</button>
@@ -297,15 +355,23 @@ async function salvaSfida(id) {
   const desc  = document.getElementById(`desc-${id}`).value.trim();
   const punti = parseInt(document.getElementById(`punti-${id}`).value, 10);
   const tag   = normalizeSfidaTag(document.getElementById(`tag-${id}`).value);
+  const tagVisibile = normalizeVisibleSfidaTag(document.getElementById(`tag-visibile-${id}`).value);
   if (!desc || !punti) return mostraToast('Compila descrizione e punti', 'error');
 
-  const { error } = await supabaseClient
-    .from('sfide')
-    .update({ descrizione: desc, punti, tag: tag || null })
-    .eq('id', id);
+  const payloadCompleto = { descrizione: desc, punti, tag: tag || null, tag_visibile: tagVisibile };
+  const payloadFallback = { descrizione: desc, punti, tag: tag || null };
+
+  const { error, usedFallback } = await aggiornaSfidaConFallback(id, payloadCompleto, payloadFallback);
 
   if (error) { mostraToast('Errore salvataggio', 'error'); return; }
-  sfide = sfide.map(s => s.id === id ? { ...s, descrizione: desc, punti, tag: tag || null } : s);
+  const sfidaAggiornata = { descrizione: desc, punti, tag: tag || null, tag_visibile: tagVisibile };
+  sfide = sfide.map(s => s.id === id ? { ...s, ...sfidaAggiornata } : s);
+
+  if (usedFallback) {
+    mostraToastTagVisibileFallback();
+    return;
+  }
+
   mostraToast('Sfida aggiornata ✓', 'success');
 }
 
@@ -322,15 +388,15 @@ document.getElementById('btn-aggiungi-sfida').addEventListener('click', async ()
   const desc  = document.getElementById('nuova-desc').value.trim();
   const punti = parseInt(document.getElementById('nuovi-punti').value, 10);
   const tag   = normalizeSfidaTag(document.getElementById('nuovo-tag').value);
+  const tagVisibile = normalizeVisibleSfidaTag(document.getElementById('nuovo-tag-visibile').value);
   if (!desc || !punti) return mostraToast('Compila descrizione e punti', 'error');
 
   const ordine = sfide.length > 0 ? Math.max(...sfide.map(s => s.ordine || 0)) + 1 : 1;
 
-  const { data, error } = await supabaseClient
-    .from('sfide')
-    .insert({ descrizione: desc, punti, ordine, tag: tag || null })
-    .select()
-    .single();
+  const payloadCompleto = { descrizione: desc, punti, ordine, tag: tag || null, tag_visibile: tagVisibile };
+  const payloadFallback = { descrizione: desc, punti, ordine, tag: tag || null };
+
+  const { data, error, usedFallback } = await inserisciSfidaConFallback(payloadCompleto, payloadFallback);
 
   if (error) { mostraToast('Errore aggiunta', 'error'); return; }
   sfide.push(data);
@@ -338,6 +404,13 @@ document.getElementById('btn-aggiungi-sfida').addEventListener('click', async ()
   document.getElementById('nuova-desc').value  = '';
   document.getElementById('nuovi-punti').value = '2';
   document.getElementById('nuovo-tag').value = '';
+  document.getElementById('nuovo-tag-visibile').value = 'general';
+
+  if (usedFallback) {
+    mostraToastTagVisibileFallback();
+    return;
+  }
+
   mostraToast('Sfida aggiunta ✓', 'success');
 });
 
