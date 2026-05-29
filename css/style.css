@@ -209,32 +209,13 @@ a {
   gap: 0.45rem;
 }
 
-.sfida-badge-tempo {
-  display: inline-block;
-  border-radius: 999px;
-  padding: 0.2rem 0.48rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+.sfida-time-inline {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--grigio);
   white-space: nowrap;
-}
-
-.sfida-badge-tempo-mattina {
-  background: #e8f3ff;
-  color: #2f6da8;
-  border: 1px solid #bbd9f7;
-}
-
-.sfida-badge-tempo-pomeriggio {
-  background: #fff1e6;
-  color: #b8672e;
-  border: 1px solid #f3c9a7;
-}
-
-.sfida-badge-tempo-general {
-  background: #edf6ee;
-  color: #4f7a58;
-  border: 1px solid #c8dfcc;
 }
 
 .sfida-punti {

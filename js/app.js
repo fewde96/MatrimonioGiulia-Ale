@@ -59,9 +59,9 @@ function normalizeVisibleTag(tag) {
 }
 
 function getVisibleTagLabel(tag) {
-  if (tag === 'mattina') return 'Mattina';
-  if (tag === 'pomeriggio') return 'Pomeriggio';
-  return 'Generale';
+  if (tag === 'mattina') return '☀️ Mattina';
+  if (tag === 'pomeriggio') return '🌙 Pomeriggio';
+  return '';
 }
 
 function getSfidaVisibleTag(sfida) {
@@ -74,7 +74,7 @@ function renderSfide() {
     <div class="sfida-card ${getSfidaClasse(s.punti)}">
       <span class="sfida-desc">${s.descrizione}</span>
       <span class="sfida-meta">
-        <span class="sfida-badge-tempo sfida-badge-tempo-${getSfidaVisibleTag(s)}">${getVisibleTagLabel(getSfidaVisibleTag(s))}</span>
+        ${getVisibleTagLabel(getSfidaVisibleTag(s)) ? `<span class="sfida-time-inline">${getVisibleTagLabel(getSfidaVisibleTag(s))}</span>` : ''}
         <span class="sfida-punti">+${s.punti} pt</span>
       </span>
     </div>
