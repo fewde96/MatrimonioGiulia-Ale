@@ -52,6 +52,29 @@ function normalizeSfidaTag(tag) {
   return String(tag || '').trim().toLowerCase();
 }
 
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeHtmlAttr(value) {
+  return escapeHtml(value).replace(/`/g, '&#96;');
+}
+
+function normalizeNomePartecipante(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function isMissingPartecipantiTable(error) {
+  if (!error) return false;
+  const msg = String(error.message || '').toLowerCase();
+  return msg.includes('relation') && msg.includes('partecipanti') && msg.includes('does not exist');
+}
+
 function normalizeVisibleTag(tag) {
   const value = String(tag || '').trim().toLowerCase();
   if (value === 'mattina' || value === 'pomeriggio' || value === 'general') return value;
@@ -222,9 +245,29 @@ caricaPartecipanti();
 // ============================================================
 async function caricaPartecipanti() {
   try {
+    const { data, error } = await supabaseClient
+      .from('partecipanti')
+      .select('nome')
+      .order('nome', { ascending: true });
+
+    if (!error && Array.isArray(data) && data.length > 0) {
+      partecipanti = data
+        .map(row => normalizeNomePartecipante(row.nome))
+        .filter(Boolean);
+      inizializzaAutocomplete();
+      return;
+    }
+
+    if (error && !isMissingPartecipantiTable(error)) {
+      console.warn('Errore tabella partecipanti, uso fallback file:', error);
+    }
+
     const res = await fetch('partecipanti.json?v=2');
     if (!res.ok) return;
-    partecipanti = await res.json();
+    const raw = await res.json();
+    partecipanti = (Array.isArray(raw) ? raw : [])
+      .map(normalizeNomePartecipante)
+      .filter(Boolean);
     inizializzaAutocomplete();
   } catch (e) {
     console.warn('partecipanti.json non trovato', e);
@@ -242,16 +285,16 @@ function inizializzaAutocomplete() {
       : partecipanti;
     if (!lista.length) { dropdown.classList.remove('open'); return; }
     dropdown.innerHTML = lista
-      .map(n => `<div class="nome-option" data-nome="${n}">${evidenzia(n, filtro)}</div>`)
+      .map(n => `<div class="nome-option" data-nome="${escapeHtmlAttr(n)}">${evidenzia(n, filtro)}</div>`)
       .join('');
     dropdown.classList.add('open');
   }
 
   function evidenzia(nome, q) {
-    if (!q) return nome;
+    if (!q) return escapeHtml(nome);
     const i = nome.toLowerCase().indexOf(q.toLowerCase());
-    if (i === -1) return nome;
-    return nome.slice(0, i) + '<strong>' + nome.slice(i, i + q.length) + '</strong>' + nome.slice(i + q.length);
+    if (i === -1) return escapeHtml(nome);
+    return escapeHtml(nome.slice(0, i)) + '<strong>' + escapeHtml(nome.slice(i, i + q.length)) + '</strong>' + escapeHtml(nome.slice(i + q.length));
   }
 
   function seleziona(nome) {

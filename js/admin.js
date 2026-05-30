@@ -55,6 +55,7 @@ function mostraAdmin() {
   caricaFoto();
   caricaClassifica();
   caricaSfide();
+  caricaPartecipantiAdmin();
 }
 
 // ============================================================
@@ -254,6 +255,27 @@ async function caricaClassifica() {
 //  TAB SFIDE EDITOR
 // ============================================================
 let sfide = [];
+let partecipantiAdmin = [];
+let partecipantiTableDisponibile = false;
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function normalizeNomePartecipante(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
+function isMissingPartecipantiTable(error) {
+  if (!error) return false;
+  const msg = String(error.message || '').toLowerCase();
+  return msg.includes('relation') && msg.includes('partecipanti') && msg.includes('does not exist');
+}
 
 function normalizeSfidaTag(tag) {
   const value = String(tag || '').trim().toLowerCase();
@@ -313,6 +335,162 @@ async function inserisciSfidaConFallback(payloadCompleto, payloadFallback) {
 
 function mostraToastTagVisibileFallback() {
   mostraToast('Salvato. Campo tag_visibile mancante su DB: usato fallback.', 'error');
+}
+
+async function fetchPartecipantiDaFile() {
+  try {
+    const res = await fetch('partecipanti.json?v=2');
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data.map(normalizeNomePartecipante).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
+function sortNomiUnici(lista) {
+  const unici = [...new Set(lista.map(normalizeNomePartecipante).filter(Boolean))];
+  return unici.sort((a, b) => a.localeCompare(b, 'it', { sensitivity: 'base' }));
+}
+
+function renderPartecipantiAdmin() {
+  const editor = document.getElementById('partecipanti-editor');
+  const note = document.getElementById('partecipanti-note');
+  const btnAdd = document.getElementById('btn-aggiungi-partecipante');
+  const btnImport = document.getElementById('btn-importa-partecipanti');
+
+  if (!editor || !note || !btnAdd || !btnImport) return;
+
+  if (partecipantiAdmin.length === 0) {
+    editor.innerHTML = `<div class="empty-state"><div class="empty-icon">📭</div>Nessun partecipante</div>`;
+  } else {
+    editor.innerHTML = partecipantiAdmin.map(p => `
+      <div class="partecipante-row">
+        <span class="partecipante-nome">${escapeHtml(p.nome)}</span>
+        ${partecipantiTableDisponibile ? `<button class="btn-sm btn-sfida-del" onclick="eliminaPartecipante(${p.id})">🗑</button>` : ''}
+      </div>
+    `).join('');
+  }
+
+  if (partecipantiTableDisponibile) {
+    note.textContent = 'Lista salvata su Supabase: puoi aggiungere, eliminare o importare dal file partecipanti.json.';
+    btnAdd.disabled = false;
+    btnImport.disabled = false;
+  } else {
+    note.textContent = 'Tabella Supabase "partecipanti" non trovata: visualizzo solo il file statico. Esegui le query SQL di setup per attivare modifica live.';
+    btnAdd.disabled = true;
+    btnImport.disabled = true;
+  }
+}
+
+async function caricaPartecipantiAdmin() {
+  const { data, error } = await supabaseClient
+    .from('partecipanti')
+    .select('id, nome')
+    .order('nome', { ascending: true });
+
+  if (!error) {
+    partecipantiTableDisponibile = true;
+    partecipantiAdmin = (data || []).map(row => ({ id: row.id, nome: normalizeNomePartecipante(row.nome) }));
+    renderPartecipantiAdmin();
+    return;
+  }
+
+  if (isMissingPartecipantiTable(error)) {
+    partecipantiTableDisponibile = false;
+    const fromFile = await fetchPartecipantiDaFile();
+    partecipantiAdmin = sortNomiUnici(fromFile).map((nome, index) => ({ id: -(index + 1), nome }));
+    renderPartecipantiAdmin();
+    return;
+  }
+
+  console.error(error);
+  mostraToast('Errore caricamento partecipanti', 'error');
+}
+
+async function aggiungiPartecipante() {
+  if (!partecipantiTableDisponibile) {
+    mostraToast('Attiva prima la tabella Supabase partecipanti', 'error');
+    return;
+  }
+
+  const input = document.getElementById('nuovo-partecipante');
+  const nome = normalizeNomePartecipante(input.value);
+  if (!nome) {
+    mostraToast('Inserisci un nome valido', 'error');
+    return;
+  }
+
+  const giaPresente = partecipantiAdmin.some(p => p.nome.toLowerCase() === nome.toLowerCase());
+  if (giaPresente) {
+    mostraToast('Nome gia presente', 'error');
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from('partecipanti')
+    .insert({ nome })
+    .select('id, nome')
+    .single();
+
+  if (error) {
+    console.error(error);
+    mostraToast('Errore salvataggio nome', 'error');
+    return;
+  }
+
+  partecipantiAdmin.push({ id: data.id, nome: normalizeNomePartecipante(data.nome) });
+  partecipantiAdmin = partecipantiAdmin.sort((a, b) => a.nome.localeCompare(b.nome, 'it', { sensitivity: 'base' }));
+  input.value = '';
+  renderPartecipantiAdmin();
+  mostraToast('Partecipante aggiunto ✓', 'success');
+}
+
+async function eliminaPartecipante(id) {
+  if (!partecipantiTableDisponibile) return;
+  if (!confirm('Eliminare questo partecipante dalla lista?')) return;
+
+  const { error } = await supabaseClient
+    .from('partecipanti')
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    console.error(error);
+    mostraToast('Errore eliminazione nome', 'error');
+    return;
+  }
+
+  partecipantiAdmin = partecipantiAdmin.filter(p => p.id !== id);
+  renderPartecipantiAdmin();
+  mostraToast('Partecipante eliminato', 'success');
+}
+
+async function importaPartecipantiDaFile() {
+  if (!partecipantiTableDisponibile) {
+    mostraToast('Attiva prima la tabella Supabase partecipanti', 'error');
+    return;
+  }
+
+  const lista = sortNomiUnici(await fetchPartecipantiDaFile());
+  if (lista.length === 0) {
+    mostraToast('partecipanti.json vuoto o non disponibile', 'error');
+    return;
+  }
+
+  const payload = lista.map(nome => ({ nome }));
+  const { error } = await supabaseClient
+    .from('partecipanti')
+    .upsert(payload, { onConflict: 'nome' });
+
+  if (error) {
+    console.error(error);
+    mostraToast('Errore importazione partecipanti', 'error');
+    return;
+  }
+
+  await caricaPartecipantiAdmin();
+  mostraToast('Import completato ✓', 'success');
 }
 
 async function caricaSfide() {
@@ -412,6 +590,15 @@ document.getElementById('btn-aggiungi-sfida').addEventListener('click', async ()
   }
 
   mostraToast('Sfida aggiunta ✓', 'success');
+});
+
+document.getElementById('btn-aggiungi-partecipante').addEventListener('click', aggiungiPartecipante);
+document.getElementById('btn-importa-partecipanti').addEventListener('click', importaPartecipantiDaFile);
+document.getElementById('nuovo-partecipante').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    aggiungiPartecipante();
+  }
 });
 
 // ============================================================

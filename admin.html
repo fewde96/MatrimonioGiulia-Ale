@@ -154,6 +154,59 @@
     .btn-sfida-save { background: var(--rosa-soft); color: var(--rosa); }
     .btn-sfida-del  { background: #fdecea; color: #c0392b; }
 
+    /* PARTECIPANTI */
+    .partecipanti-toolbar {
+      display: flex;
+      gap: 0.5rem;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .partecipanti-toolbar .form-group {
+      margin-bottom: 0;
+      flex: 1;
+      min-width: 210px;
+    }
+    .btn-secondary-inline {
+      width: auto;
+      min-width: 145px;
+      padding: 0.78rem 1rem;
+      font-size: 0.88rem;
+      border: 1.5px solid var(--rosa-soft);
+      background: var(--avorio);
+      color: var(--antracite);
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .partecipanti-list {
+      margin-top: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+    .partecipante-row {
+      background: var(--bianco);
+      border: 1px solid var(--rosa-soft);
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+    .partecipante-nome {
+      font-size: 0.92rem;
+      color: var(--antracite);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .partecipanti-note {
+      margin-top: 0.8rem;
+      font-size: 0.8rem;
+      color: var(--grigio);
+    }
+
     /* MODAL foto grande */
     .modal-overlay {
       display: none;
@@ -274,6 +327,22 @@
         </div>
         <button class="btn btn-primary" id="btn-aggiungi-sfida">Aggiungi sfida</button>
       </div>
+
+      <div class="card" style="margin-top:1.2rem">
+        <h3 class="section-title" style="font-size:1rem;margin-bottom:1rem">Partecipanti</h3>
+        <div class="partecipanti-toolbar">
+          <div class="form-group">
+            <label for="nuovo-partecipante">Nuovo nome</label>
+            <input type="text" id="nuovo-partecipante" placeholder="Es. Marco Rossi" maxlength="80" />
+          </div>
+          <button class="btn btn-primary" id="btn-aggiungi-partecipante" style="width:auto;min-width:145px">Aggiungi nome</button>
+          <button class="btn-secondary-inline" id="btn-importa-partecipanti" type="button">Importa da file</button>
+        </div>
+        <div class="partecipanti-list" id="partecipanti-editor">
+          <div class="empty-state"><div class="empty-icon">⏳</div>Caricamento partecipanti…</div>
+        </div>
+        <p class="partecipanti-note" id="partecipanti-note"></p>
+      </div>
     </div>
 
   </div><!-- /pannello-admin -->
@@ -289,7 +358,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="config.js?v=2"></script>
-  <script src="js/admin.js?v=5"></script>
+  <script src="js/admin.js?v=6"></script>
 
 </body>
 </html>
